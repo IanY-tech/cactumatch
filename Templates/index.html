@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CactuMATCH</title>
+    <style>
+        * {
+            margin:0; padding:0; box-sizing:border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        body { background:#f5f7fa; color:#333; }
+
+        .top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #00B497 !important;
+            color: #ffffff !important;
+            border-bottom: 1px solid #00A086 !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff !important;
+        }
+        .logo span {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-left: 8px;
+            font-weight: 400;
+        }
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user button {
+            background: rgba(255,255,255,0.15) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .user button:hover {
+            background: rgba(255,255,255,0.3) !important;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .main {
+            margin-top: 80px;
+            padding: 20px 40px;
+            max-width: 1600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .title h2 {
+            font-size:22px;
+            color:#2d3748;
+        }
+        .post-link {
+            font-size:14px;
+            color:#1890ff;
+            cursor:pointer;
+            text-decoration:underline;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background:#fff; border-radius:12px; padding:22px;
+            box-shadow:0 2px 12px rgba(0,0,0,0.04); border:1px solid #e8e8e8;
+            position:relative;
+        }
+        .tag {
+            position:absolute; top:16px; right:16px;
+            background:#e6f7ff; color:#1890ff;
+            font-size:12px; padding:3px 8px; border-radius:12px;
+        }
+        .admin-label {
+            color: #F59E0B;
+            font-weight: 600;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        input, select {
+            width:100%; padding:10px 14px; margin:8px 0;
+            border:1px solid #e8e8e8; border-radius:8px; outline:none;
+        }
+        button {
+            padding:10px 20px; background:#1890ff; color:white;
+            border:none; border-radius:8px; cursor:pointer;
+        }
+        .btn-red { background: #f44336 !important; }
+        .btn-green { background: #4caf50 !important; }
+        .btn-gray { background: #9e9e9e !important; }
+
+        .dropdown { position:relative; }
+        .result {
+            position:absolute; top:100%; left:0; right:0;
+            background:white; border:1px solid #e8e8e8; border-radius:8px;
+            max-height:180px; overflow-y:auto; z-index:10; display:none;
+        }
+        .result div { padding:10px; cursor:pointer; }
+        .result div:hover { background:#f5f7fa; }
+        .flash { background:#ffebee; color:#d32f2f; padding:12px; border-radius:8px; margin-bottom:16px; }
+        .modal {
+            display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+            background:rgba(0,0,0,0.4); z-index:1000;
+            align-items:center; justify-content:center;
+        }
+        .modal-box {
+            background:white; width:500px; border-radius:12px; overflow:hidden;
+            max-height:90vh; overflow-y:auto;
+        }
+        .modal-header {
+            padding:16px 24px; background:#fafafa; border-bottom:1px solid #eee;
+            display:flex; justify-content:space-between; align-items:center;
+        }
+        .modal-body { padding:24px; }
+        .close { cursor:pointer; font-size:20px; }
+        .tabs { display:flex; }
+        .tab { flex:1; padding:16px; text-align:center; cursor:pointer; background:#f5f7fa; }
+        .tab.active { background:white; font-weight:bold; color:#1890ff; }
+        .form { padding:24px; display:none; }
+        .form.active { display:block; }
+
+        .upload-modal {
+            display:none; position:fixed; top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;
+        }
+        .upload-box {
+            background:white; padding:30px; border-radius:12px; width:400px; text-align:center;
+        }
+
+        .checkbox-row {
+            display:flex; align-items:center; gap:6px; margin-top:6px; font-size:14px;
+        }
+        .checkbox-row input { width:auto; }
+
+        .input-with-icon { position:relative; }
+        .info-icon {
+            position:absolute; right:12px; top:50%; transform:translateY(-50%);
+            width:18px; height:18px; border-radius:50%; background:#ccc;
+            color:white; font-size:12px; display:flex; align-items:center; justify-content:center;
+            cursor:pointer; font-weight:bold;
+        }
+
+        .tooltip-modal {
+            display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+            background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;
+        }
+        .tooltip-box {
+            background:white; padding:20px 24px; border-radius:12px;
+            max-width:360px; text-align:center;
+        }
+
+        /* 🔥 管理员欢迎弹窗 */
+        .welcome-popup {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            background: white;
+            padding: 18px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: welcomeFadeIn 0.6s forwards;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        @keyframes welcomeFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge-img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+        }
+
+        .welcome-text h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #222;
+        }
+        .welcome-text p {
+            margin: 4px 0 0;
+            color: #00B497;
+            font-weight: 600;
+        }
+        .welcome-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #999;
+        }
+
+        /* 🔥 纯白登出全屏动画 */
+        .logout-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            color: #333;
+            font-size: 22px;
+            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .logout-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top">
+    <div class="logo">CactuMATCH <span>Mock Platform by NCSDA</span></div>
+    <div class="user">
+        {% if user %}
+        <div style="position:relative; display:inline-block;">
+            <div class="avatar" style="background:{{user.color}}" onclick="toggleDropdown()">
+                {% if user.avatar %}
+                <img src="{{url_for('static', filename='avatars/'+user.avatar)}}">
+                {% else %}
+                {{user.first_name[0]|upper}}{{user.last_name[0]|upper}}
+                {% endif %}
+            </div>
+            <div id="avatarMenu" style="
+                display:none;
+                position:absolute;
+                top:44px;
+                right:0;
+                background:white;
+                border-radius:8px;
+                box-shadow:0 4px 12px rgba(0,0,0,0.15);
+                width:160px;
+                z-index:9999;
+            ">
+                <div style="padding:10px 14px; font-size:13px; color:#666; border-bottom:1px solid #eee;">
+                    {{user.first_name}} {{user.last_name}}
+                </div>
+                <div onclick="document.getElementById('uploadModal').style.display='flex'; closeMenu();"
+                     style="padding:10px 14px; font-size:14px; cursor:pointer; color:#333;">
+                    Change Avatar
+                </div>
+                <div onclick="showLogoutOverlay()"
+                     style="padding:10px 14px; font-size:14px; cursor:pointer; color:#e53935; border-top:1px solid #eee;">
+                    Logout
+                </div>
+            </div>
+        </div>
+        <div>{{user.first_name}} {{user.last_name}}</div>
+        {% else %}
+        <button onclick="showAuth('login')">Login</button>
+        <button onclick="showAuth('signup')">Sign Up</button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="main">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="flash">{{messages[0]}}</div>{% endif %}
+    {% endwith %}
+
+    <div class="title">
+        <h2>All Matches</h2>
+        {% if user %}
+        <div class="post-link" onclick="document.getElementById('postModal').style.display='flex'">Post your own match</div>
+        {% endif %}
+    </div>
+
+    <div class="grid">
+        {% for m in matches %}
+        {% set max = 4 if m.type == 'BP' else 2 %}
+        {% set full = m.teams|length >= max %}
+        {% set is_admin = (user.first_name == 'Ian' or user.first_name == 'Round') %}
+        {% set is_match_admin = (m.author == "roundmanager@cactumatch.com") %}
+        
+        <div class="card">
+            <div class="tag">{{m.type}}</div>
+            <h3>{{m.type}} Match
+                {% if is_match_admin %}
+                <span class="admin-label">Posted by ADMIN</span>
+                {% endif %}
+            </h3>
+            
+            <p>Time: {{m.time}}</p>
+            <p>Platform: {{m.platform}}</p>
+            <p>Judge: {{m.judge}}</p>
+            <p>ID: {{m.meeting_id}}</p>
+            <p>PW: {{m.meeting_pwd}}</p>
+            <p>Teams: {{m.teams|length}}/{{max}} {% if full %}<b>FULL</b>{% endif %}</p>
+
+            {% if user and not full %}
+            <form method="post" action="/join/{{loop.index0}}" style="margin-top:16px">
+                <div class="dropdown input-with-icon">
+                    <input name="teammate_user_join" placeholder="Teammate Email" oninput="search(this.value, 'resj{{loop.index0}}')">
+                    <div class="info-icon" onclick="showTooltip()">i</div>
+                    <div class="result" id="resj{{loop.index0}}"></div>
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" name="no_account_join" class="noaccjoin">
+                    <label>No account</label>
+                </div>
+                <input name="teammate_manual_join" placeholder="Name" disabled style="margin-top:8px">
+                <button style="margin-top:8px">Join</button>
+            </form>
+            {% endif %}
+
+            {% if user and (user.email == m.author or is_admin) %}
+            <button class="btn-red" style="margin-top:8px" onclick="location='/delete/{{loop.index0}}'">Delete</button>
+            {% endif %}
+
+            <div style="margin-top:16px; padding-top:16px; border-top:1px solid #eee">
+                {% for t in m.teams %}<div>{{t}}</div>{% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div style="grid-column:1/-1; text-align:center; padding:40px">No matches yet</div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="modal" id="postModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Post a Match</h3>
+            <span class="close" onclick="closePost()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="/post" onsubmit="closePost()">
+                <select name="type" required>
+                    <option value="LD">LD (1v1)</option>
+                    <option value="PF">PF (2v2)</option>
+                    <option value="BP">BP (3v3)</option>
+                </select>
+                <input type="datetime-local" name="time" required>
+                <input name="platform" placeholder="Platform" required>
+                <input name="judge" placeholder="Judge" required>
+                <input name="meeting_id" placeholder="Meeting ID" required>
+                <input name="meeting_pwd" placeholder="Password" required>
+
+                <div class="dropdown input-with-icon">
+                    <input name="teammate_user" placeholder="Teammate Email" oninput="search(this.value, 'res1')">
+                    <div class="info-icon" onclick="showTooltip()">i</div>
+                    <div class="result" id="res1"></div>
+                </div>
+
+                <div class="checkbox-row">
+                    <input type="checkbox" name="no_account" id="noacc">
+                    <label for="noacc">Partner has no account</label>
+                </div>
+
+                <input name="teammate_manual" placeholder="Partner Name" disabled style="margin-top:8px">
+
+                <button class="btn-green" style="margin-top:12px; width:100%">Post Match</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="authModal">
+    <div class="modal-box">
+        <div class="tabs">
+            <div class="tab active" onclick="tab('login')">Login</div>
+            <div class="tab" onclick="tab('signup')">Sign Up</div>
+        </div>
+        <div class="form active" id="login">
+            <form method="post" action="/login">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button>Login</button>
+            </form>
+        </div>
+        <div class="form" id="signup">
+            <form method="post" action="/register">
+                <input name="first_name" placeholder="First Name" required>
+                <input name="last_name" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button>Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="upload-modal" id="uploadModal">
+    <div class="upload-box">
+        <h3>Change Avatar</h3>
+        <form method="post" action="/upload_avatar" enctype="multipart/form-data" style="margin-top:20px" onsubmit="document.getElementById('uploadModal').style.display='none'">
+            <input type="file" name="avatar" accept="image/*" required>
+            <button style="margin-top:16px">Upload</button>
+            <button type="button" style="background:#999;margin-left:8px" onclick="document.getElementById('uploadModal').style.display='none'">Cancel</button>
+        </form>
+
+        <div style="margin-top:24px; padding-top:20px; border-top:1px solid #eee;">
+            <h3 style="margin-bottom:14px;">Change Color</h3>
+            <form method="POST" action="/change-color" onsubmit="document.getElementById('uploadModal').style.display='none'">
+                <input type="color" name="color" value="{{ user.color }}" style="width:100%; height:42px; border-radius:8px; border:1px solid #ddd;">
+                <button style="margin-top:14px; width:100%;">Save Color</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="tooltip-modal" id="tooltipModal">
+    <div class="tooltip-box">
+        <p>Please fill in the Email that your teammate used to register CactuMATCH</p>
+        <button style="margin-top:16px" onclick="closeTooltip()">OK</button>
+    </div>
+</div>
+
+<!-- 🔥 纯白登出全屏 -->
+<div class="logout-overlay" id="logoutOverlay">
+    Please Wait While We Log You Out
+</div>
+
+<script>
+function showAuth(m) {
+    document.getElementById('authModal').style.display = 'flex';
+    tab(m);
+}
+function tab(m) {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.form').forEach(f=>f.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(m).classList.add('active');
+}
+function closePost() {
+    document.getElementById('postModal').style.display='none';
+}
+function search(val, id) {
+    const r = document.getElementById(id);
+    if (!val || val.length<2) { r.style.display='none'; return; }
+    fetch('/api/users?q='+val).then(res=>res.json()).then(users=>{
+        r.innerHTML = '';
+        users.forEach(u=>{
+            const d = document.createElement('div');
+            d.innerText = u;
+            d.onclick = ()=>{
+                document.querySelector(`#${id}`).previousElementSibling.value = u;
+                r.style.display='none';
+            };
+            r.appendChild(d);
+        });
+        r.style.display = users.length ? 'block':'none';
+    });
+}
+document.querySelectorAll('.noaccjoin').forEach(cb=>{
+    cb.onchange = function(){
+        this.closest('form').querySelector('[name*="manual"]').disabled = !this.checked;
+    };
+});
+document.getElementById('noacc').onchange = function(){
+    document.querySelector('[name="teammate_manual"]').disabled = !this.checked;
+};
+
+function showTooltip() {
+    document.getElementById('tooltipModal').style.display = 'flex';
+}
+function closeTooltip() {
+    document.getElementById('tooltipModal').style.display = 'none';
+}
+
+// 头像菜单
+function toggleDropdown() {
+    let menu = document.getElementById("avatarMenu");
+    menu.style.display = menu.style.display == "block" ? "none" : "block";
+}
+function closeMenu() {
+    document.getElementById("avatarMenu").style.display = "none";
+}
+
+window.onclick = function(e) {
+    let menu = document.getElementById("avatarMenu");
+    let avatar = document.querySelector(".avatar");
+    if(menu && avatar && !avatar.contains(e.target)) {
+        menu.style.display = "none";
+    }
+
+    if(e.target===document.getElementById('authModal')) document.getElementById('authModal').style.display='none';
+    if(e.target===document.getElementById('uploadModal')) document.getElementById('uploadModal').style.display='none';
+    if(e.target===document.getElementById('postModal')) closePost();
+    if(e.target===document.getElementById('tooltipModal')) closeTooltip();
+};
+
+// 登出3秒纯白动画
+function showLogoutOverlay() {
+    let overlay = document.getElementById('logoutOverlay');
+    overlay.classList.add('active');
+    closeMenu();
+    setTimeout(()=>{
+        window.location.href = '/logout';
+    }, 3000);
+}
+</script>
+
+<!-- 管理员欢迎弹窗 -->
+{% if user and user.email == "ian@cactumatch.com" %}
+<div class="welcome-popup" id="welcome">
+    <span class="welcome-close" onclick="document.getElementById('welcome').remove()">&times;</span>
+    <img src="{{ url_for('static', filename='badges/gold-badge.png') }}" class="badge-img">
+    <div class="welcome-text">
+        <h2>Welcome, SUPER ADMIN</h2>
+    </div>
+</div>
+
+{% elif user and user.email == "roundmanager@cactumatch.com" %}
+<div class="welcome-popup" id="welcome">
+    <span class="welcome-close" onclick="document.getElementById('welcome').remove()">&times;</span>
+    <img src="{{ url_for('static', filename='badges/silver-badge.png') }}" class="badge-img">
+    <div class="welcome-text">
+        <h2>Welcome, ADMIN</h2>
+    </div>
+</div>
+{% endif %}
+
+</body>
+</html>

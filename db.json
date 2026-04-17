@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "email": "ian@cactumatch.com",
+      "password": "cactumatch2026",
+      "first_name": "Ian",
+      "last_name": "Admin",
+      "avatar": "ian_cactumatch_com.png",
+      "color": "#871717"
+    },
+    {
+      "email": "roundmanager@cactumatch.com",
+      "password": "cactumatch2026",
+      "first_name": "Round",
+      "last_name": "Manager",
+      "avatar": "",
+      "color": "#F06292"
+    }
+  ],
+  "matches": []
+}
