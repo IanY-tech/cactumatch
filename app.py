@@ -1,3 +1,28 @@
+# 自动移除 Replit 水印 - 粘贴到 app.py 最顶部
+import re
+import os
+
+def remove_replit_watermark():
+    try:
+        # 你的首页 HTML 路径（99% 人都是这个）
+        html_path = "templates/index.html"
+        
+        if os.path.exists(html_path):
+            with open(html_path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            # 永久删除水印
+            content = re.sub(r'<script src="https://replit\.com/public/js/replit-badge\.js".*?></script>', '', content)
+
+            with open(html_path, "w", encoding="utf-8") as f:
+                f.write(content)
+                
+            print("✅ 已自动移除 Replit 水印")
+    except:
+        pass
+
+# 启动就自动执行
+remove_replit_watermark()
 from flask import Flask, render_template, request, redirect, session, flash, jsonify
 import os
 import json
