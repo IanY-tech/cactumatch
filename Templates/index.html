@@ -5,152 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CactuMATCH</title>
     <style>
-        * {
-            margin:0; padding:0; box-sizing:border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
         body { background:#f5f7fa; color:#333; }
+        .top { position:fixed; top:0; left:0; right:0; height:60px; background:#00B497; color:#fff; border-bottom:1px solid #00A086; display:flex; justify-content:space-between; align-items:center; padding:0 30px; z-index:99999; }
+        .logo { font-size:20px; font-weight:600; color:#fff; }
+        .logo span { font-size:12px; opacity:0.8; margin-left:8px; font-weight:400; }
+        .user { display:flex; align-items:center; gap:12px; }
 
-        .top {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: #00B497 !important;
-            color: #ffffff !important;
-            border-bottom: 1px solid #00A086 !important;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-            z-index: 100;
-        }
-        .logo {
-            font-size: 20px;
-            font-weight: 600;
-            color: #ffffff !important;
-        }
-        .logo span {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-left: 8px;
-            font-weight: 400;
-        }
-        .user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .user button {
-            background: rgba(255,255,255,0.15) !important;
-            color: #fff !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
-            padding: 6px 12px;
-            border-radius: 6px;
+        .nav-btn-login {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 18px;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
-        .user button:hover {
-            background: rgba(255,255,255,0.3) !important;
+        .nav-btn-login:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
         }
 
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
+        .nav-btn-home {
+            background: transparent;
+            color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.6);
+            padding: 8px 18px;
+            border-radius: 20px;
             cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
+        .nav-btn-home:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #fff;
         }
-        .main {
-            margin-top: 80px;
-            padding: 20px 40px;
-            max-width: 1600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .title {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .title h2 {
-            font-size:22px;
-            color:#2d3748;
-        }
-        .post-link {
-            font-size:14px;
-            color:#1890ff;
-            cursor:pointer;
-            text-decoration:underline;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            background:#fff; border-radius:12px; padding:22px;
-            box-shadow:0 2px 12px rgba(0,0,0,0.04); border:1px solid #e8e8e8;
-            position:relative;
-        }
-        .tag {
-            position:absolute; top:16px; right:16px;
-            background:#e6f7ff; color:#1890ff;
-            font-size:12px; padding:3px 8px; border-radius:12px;
-        }
-        .admin-label {
-            color: #F59E0B;
-            font-weight: 600;
-            font-size: 12px;
-            margin-left: 8px;
-        }
-        input, select {
-            width:100%; padding:10px 14px; margin:8px 0;
-            border:1px solid #e8e8e8; border-radius:8px; outline:none;
-        }
-        button {
-            padding:10px 20px; background:#1890ff; color:white;
-            border:none; border-radius:8px; cursor:pointer;
-        }
-        .btn-red { background: #f44336 !important; }
-        .btn-green { background: #4caf50 !important; }
-        .btn-gray { background: #9e9e9e !important; }
 
-        .dropdown { position:relative; }
-        .result {
-            position:absolute; top:100%; left:0; right:0;
-            background:white; border:1px solid #e8e8e8; border-radius:8px;
-            max-height:180px; overflow-y:auto; z-index:10; display:none;
+        .nav-btn-premium {
+            background: transparent;
+            color: #FFD700;
+            border: 1.5px solid #FFD700;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
-        .result div { padding:10px; cursor:pointer; }
-        .result div:hover { background:#f5f7fa; }
+        .nav-btn-premium:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #FFE44D;
+            color: #FFE44D;
+            transform: translateY(-1px);
+        }
+
+        .avatar-row { display:flex; align-items:center; gap:8px; }
+        .avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:600; font-size:14px; cursor:pointer; }
+        .avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
+        .username { color:white; font-size:14px; font-weight:500; }
+        .premium-name-badge { background:linear-gradient(90deg,#FFD700,#FFB900); color:#713F12; font-size:12px; padding:2px 6px; border-radius:10px; font-weight:bold; }
+
+        .lv-badge {
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .lv1 { background: #909399; }
+        .lv2 { background: #67C23A; }
+        .lv3 { background: #409EFF; }
+        .lv4 { background: #8E44AD; }
+        .lv5 { background: #E74C3C; }
+        .lv6 { background: #FFD700; color: #713F12; }
+
+        #avatarMenu { z-index:9999999; position:absolute; top:50px; right:20px; background:white; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.2); width:200px; display:none; }
+        #avatarMenu div { padding:10px 16px; cursor:pointer; color:#333; }
+        #avatarMenu div:hover { background:#f5f7fa; }
+        .premium-entry { color:#F59E0B !important; font-weight:600; }
+        .gold-admin { color:#FFD700 !important; font-weight:600; }
+        .purple-admin { color:#9C27B0 !important; font-weight:600; }
+        .red-admin { color:#f44336 !important; font-weight:600; }
+        .logout-item { color:#f44336 !important; font-weight:600; }
+        .menu-divider { height:1px; background:#e0e0e0; margin:8px 0; padding:0 !important; cursor:default !important; pointer-events:none; }
+        .main { margin-top:80px; padding:20px 40px; max-width:1600px; margin-left:auto; margin-right:auto; }
+        .title { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+        .title h2 { font-size:22px; color:#2d3436; }
+        .post-link { font-size:14px; color:#1890ff; cursor:pointer; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; }
+        .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 2px 12px rgba(0,0,0,0.04); border:1px solid #e8e8e8; position:relative; }
+        .premium-badge { background:linear-gradient(90deg,#FFD700,#FFB900); color:#713F12; font-weight:bold; font-size:12px; padding:3px 8px; border-radius:12px; }
+        input, select { width:100%; padding:10px 14px; margin:8px 0; border:1px solid #e8e8e8; border-radius:8px; outline:none; }
+        button { padding:10px 20px; background:#1890ff; color:white; border:none; border-radius:8px; cursor:pointer; }
+        .btn-red { background:#f44336 !important; }
+        .btn-green { background:#4CAF50 !important; }
+        .btn-orange { background:#FF9800 !important; }
+        .btn-purple { background:#9C27B0 !important; }
         .flash { background:#ffebee; color:#d32f2f; padding:12px; border-radius:8px; margin-bottom:16px; }
-        .modal {
-            display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-            background:rgba(0,0,0,0.4); z-index:1000;
-            align-items:center; justify-content:center;
-        }
-        .modal-box {
-            background:white; width:500px; border-radius:12px; overflow:hidden;
-            max-height:90vh; overflow-y:auto;
-        }
-        .modal-header {
-            padding:16px 24px; background:#fafafa; border-bottom:1px solid #eee;
-            display:flex; justify-content:space-between; align-items:center;
-        }
+        .flash-success { background:#4CAF50; color:white; padding:12px; border-radius:8px; margin-bottom:16px; text-align:center; }
+        .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center; }
+        .modal-box { background:white; width:500px; border-radius:12px; overflow:hidden; max-height:90vh; overflow-y:auto; }
+        .modal-header { padding:16px 24px; background:#fafafa; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
         .modal-body { padding:24px; }
         .close { cursor:pointer; font-size:20px; }
         .tabs { display:flex; }
@@ -158,413 +116,682 @@
         .tab.active { background:white; font-weight:bold; color:#1890ff; }
         .form { padding:24px; display:none; }
         .form.active { display:block; }
-
-        .upload-modal {
-            display:none; position:fixed; top:0;left:0;right:0;bottom:0;
-            background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;
-        }
-        .upload-box {
-            background:white; padding:30px; border-radius:12px; width:400px; text-align:center;
-        }
-
-        .checkbox-row {
-            display:flex; align-items:center; gap:6px; margin-top:6px; font-size:14px;
-        }
+        .checkbox-row { display:flex; align-items:center; gap:6px; margin-top:6px; font-size:14px; }
         .checkbox-row input { width:auto; }
+        .eval-item { background:#fff; padding:12px; border-radius:8px; margin-bottom:8px; border-left:4px solid #1890ff; }
+        .eval-item .badge { font-size:12px; padding:2px 6px; border-radius:4px; color:#fff; margin-left:6px; }
+        .badge-pre { background:#009688; }
+        .badge-re { background:#FF5722; }
+        .admin-input { margin-bottom:10px; }
+        .hidden { display:none; }
+        .hint-text { font-size:12px; color:#999; margin-top:-5px; margin-bottom:8px; }
+        .timer-display { font-size:48px; font-weight:bold; text-align:center; margin:20px 0; font-family:monospace; }
+        .timer-card { background:#f5f7fa; padding:20px; border-radius:8px; margin-bottom:15px; }
+        .timer-controls { display:flex; gap:10px; margin-top:15px; }
+        .timer-controls button { flex:1; }
+        .format-selector { margin-bottom:20px; }
+        .format-buttons { display:flex; gap:10px; margin-top:10px; }
+        .format-btn { flex:1; padding:10px; background:#e0e0e0; color:#333; }
+        .format-btn.active { background:#00B497; color:white; }
+        .email-status { font-size:12px; margin-top:-5px; margin-bottom:8px; }
+        .email-status.valid { color:#4CAF50; }
+        .email-status.invalid { color:#f44336; }
+        .custom-timer-section { margin-top:40px; padding-top:30px; border-top:2px solid #e0e0e0; }
+        .time-input-group { display:flex; gap:10px; align-items:center; }
+        .time-input-group input { width:80px; text-align:center; }
+        .time-input-group span { font-size:18px; font-weight:bold; }
+        .custom-timer-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .custom-timer-header h3 { color:#333; }
+        .redeem-note { margin-top:16px; font-size:13px; color:#888; text-align:center; }
 
-        .input-with-icon { position:relative; }
-        .info-icon {
-            position:absolute; right:12px; top:50%; transform:translateY(-50%);
-            width:18px; height:18px; border-radius:50%; background:#ccc;
-            color:white; font-size:12px; display:flex; align-items:center; justify-content:center;
-            cursor:pointer; font-weight:bold;
-        }
-
-        .tooltip-modal {
-            display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-            background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;
-        }
-        .tooltip-box {
-            background:white; padding:20px 24px; border-radius:12px;
-            max-width:360px; text-align:center;
-        }
-
-        /* 🔥 管理员欢迎弹窗 */
-        .welcome-popup {
-            position: fixed;
-            top: 80px;
-            right: 30px;
-            background: white;
-            padding: 18px 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 9999;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: welcomeFadeIn 0.6s forwards;
+        /* CV Review Notification */
+        .cv-notification {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-left: 4px solid #9C27B0;
+            border-radius: 8px;
+            padding: 14px 20px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        @keyframes welcomeFadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .badge-img {
-            width: 55px;
-            height: 55px;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-        }
-
-        .welcome-text h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #222;
-        }
-        .welcome-text p {
-            margin: 4px 0 0;
-            color: #00B497;
-            font-weight: 600;
-        }
-        .welcome-close {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            color: #999;
-        }
-
-        /* 🔥 纯白登出全屏动画 */
-        .logout-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #ffffff;
+        .cv-notification-left {
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 99999;
+            gap: 12px;
+        }
+        .cv-notification-text {
+            font-size: 14px;
             color: #333;
-            font-size: 22px;
             font-weight: 500;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
         }
-        .logout-overlay.active {
-            opacity: 1;
-            pointer-events: all;
+        .cv-notification-badge {
+            background: #f44336;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 12px;
+            min-width: 24px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
 <div class="top">
-    <div class="logo">CactuMATCH <span>Mock Platform by NCSDA</span></div>
+    <div class="logo">CactuMATCH<span>for debate</span></div>
     <div class="user">
         {% if user %}
-        <div style="position:relative; display:inline-block;">
-            <div class="avatar" style="background:{{user.color}}" onclick="toggleDropdown()">
-                {% if user.avatar %}
-                <img src="{{url_for('static', filename='avatars/'+user.avatar)}}">
-                {% else %}
-                {{user.first_name[0]|upper}}{{user.last_name[0]|upper}}
+        <div style="display:flex; gap:12px; margin-right:16px;">
+            <button class="nav-btn-home" onclick="window.location.href='/'">Home</button>
+            {% if user.premium %}
+            <button class="nav-btn-premium" onclick="window.location.href='/timer'">Premium Exclusive</button>
+            {% else %}
+            <button class="nav-btn-premium" onclick="openModal('redeemModal')">Premium Exclusive</button>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if not user %}
+        <button class="nav-btn-login" onclick="openModal('authModal')">Login / Register</button>
+        {% else %}
+        <div style="position:relative;">
+            <div class="avatar-row" onclick="toggleAvatarMenu()">
+                <div class="avatar" style="background: {{user.color}}">
+                    {% if user.avatar %}
+                    <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}">
+                    {% else %}
+                    {{ user.first_name[0] }}{{ user.last_name[0] }}
+                    {% endif %}
+                </div>
+                <span class="username">{{user.first_name}} {{user.last_name}}</span>
+                {% if user.premium %}<span class="premium-name-badge">PREMIUM</span>{% endif %}
+                {% if user.level %}
+                <span class="lv-badge lv{{ user.level }}">LV{{ user.level }}</span>
                 {% endif %}
             </div>
-            <div id="avatarMenu" style="
-                display:none;
-                position:absolute;
-                top:44px;
-                right:0;
-                background:white;
-                border-radius:8px;
-                box-shadow:0 4px 12px rgba(0,0,0,0.15);
-                width:160px;
-                z-index:9999;
-            ">
-                <div style="padding:10px 14px; font-size:13px; color:#666; border-bottom:1px solid #eee;">
-                    {{user.first_name}} {{user.last_name}}
-                </div>
-                <div onclick="document.getElementById('uploadModal').style.display='flex'; closeMenu();"
-                     style="padding:10px 14px; font-size:14px; cursor:pointer; color:#333;">
-                    Change Avatar
-                </div>
-                <div onclick="showLogoutOverlay()"
-                     style="padding:10px 14px; font-size:14px; cursor:pointer; color:#e53935; border-top:1px solid #eee;">
-                    Logout
-                </div>
+            <div id="avatarMenu">
+                <div onclick="openModal('avatarModal')">Change Avatar</div>
+
+                {% if user.email != "ian@cactumatch.com" %}
+                <div onclick="openModal('redeemModal')">Redeem Premium Code</div>
+                {% endif %}
+
+                {% if user.email == "ian@cactumatch.com" %}
+                <div class="gold-admin" onclick="openModal('generateModal')">Generate Code</div>
+                <div class="purple-admin" onclick="openModal('setLevelModal')">Set User Level</div>
+                <div class="red-admin" onclick="openModal('reviewCVModal')">Review CVs {% if pending_count > 0 %}<span style="background:#f44336;color:white;padding:2px 7px;border-radius:10px;font-size:11px;margin-left:4px;">{{ pending_count }}</span>{% endif %}</div>
+                {% endif %}
+
+                {% if user.email != "ian@cactumatch.com" %}
+                <div onclick="openModal('cvModal')">Update CV</div>
+                {% endif %}
+
+                <div class="menu-divider"></div>
+                <div class="logout-item" onclick="window.location.href='/logout'">Log Out</div>
             </div>
         </div>
-        <div>{{user.first_name}} {{user.last_name}}</div>
-        {% else %}
-        <button onclick="showAuth('login')">Login</button>
-        <button onclick="showAuth('signup')">Sign Up</button>
         {% endif %}
     </div>
 </div>
 
 <div class="main">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}<div class="flash">{{messages[0]}}</div>{% endif %}
-    {% endwith %}
-
-    <div class="title">
-        <h2>All Matches</h2>
-        {% if user %}
-        <div class="post-link" onclick="document.getElementById('postModal').style.display='flex'">Post your own match</div>
+    {% with messages = get_flashed_messages() %}{% if messages %}
+        {% if 'successfully' in messages[0] or 'Success' in messages[0] or 'Set' in messages[0] %}
+        <div class="flash-success">{{ messages[0] }}</div>
+        {% else %}
+        <div class="flash">{{ messages[0] }}</div>
         {% endif %}
+    {% endif %}{% endwith %}
+
+    <!-- CV Review Notification for Ian -->
+    {% if user and user.email == "ian@cactumatch.com" and pending_count > 0 %}
+    <div class="cv-notification">
+        <div class="cv-notification-left">
+            <span class="cv-notification-text">📋 You have unreviewed CVs</span>
+            <span class="cv-notification-badge">{{ pending_count }}</span>
+        </div>
+        <button class="btn-purple" onclick="openModal('reviewCVModal')" style="width:auto; padding:8px 20px;">Go Review</button>
     </div>
+    {% endif %}
 
-    <div class="grid">
-        {% for m in matches %}
-        {% set max = 4 if m.type == 'BP' else 2 %}
-        {% set full = m.teams|length >= max %}
-        {% set is_admin = (user.first_name == 'Ian' or user.first_name == 'Round') %}
-        {% set is_match_admin = (m.author == "roundmanager@cactumatch.com") %}
-        
-        <div class="card">
-            <div class="tag">{{m.type}}</div>
-            <h3>{{m.type}} Match
-                {% if is_match_admin %}
-                <span class="admin-label">Posted by ADMIN</span>
-                {% endif %}
-            </h3>
-            
-            <p>Time: {{m.time}}</p>
-            <p>Platform: {{m.platform}}</p>
-            <p>Judge: {{m.judge}}</p>
-            <p>ID: {{m.meeting_id}}</p>
-            <p>PW: {{m.meeting_pwd}}</p>
-            <p>Teams: {{m.teams|length}}/{{max}} {% if full %}<b>FULL</b>{% endif %}</p>
+    {% if request.path == '/timer' and user %}
+    <div class="timer-page">
+        <h2>Premium Timer</h2>
 
-            {% if user and not full %}
-            <form method="post" action="/join/{{loop.index0}}" style="margin-top:16px">
-                <div class="dropdown input-with-icon">
-                    <input name="teammate_user_join" placeholder="Teammate Email" oninput="search(this.value, 'resj{{loop.index0}}')">
-                    <div class="info-icon" onclick="showTooltip()">i</div>
-                    <div class="result" id="resj{{loop.index0}}"></div>
-                </div>
-                <div class="checkbox-row">
-                    <input type="checkbox" name="no_account_join" class="noaccjoin">
-                    <label>No account</label>
-                </div>
-                <input name="teammate_manual_join" placeholder="Name" disabled style="margin-top:8px">
-                <button style="margin-top:8px">Join</button>
-            </form>
-            {% endif %}
-
-            {% if user and (user.email == m.author or is_admin) %}
-            <button class="btn-red" style="margin-top:8px" onclick="location='/delete/{{loop.index0}}'">Delete</button>
-            {% endif %}
-
-            <div style="margin-top:16px; padding-top:16px; border-top:1px solid #eee">
-                {% for t in m.teams %}<div>{{t}}</div>{% endfor %}
+        <div class="format-selector">
+            <label>Select Debate Format:</label>
+            <div class="format-buttons">
+                <button class="format-btn active" onclick="setFormat('PF')">PF</button>
+                <button class="format-btn" onclick="setFormat('LD')">LD</button>
+                <button class="format-btn" onclick="setFormat('BP')">BP</button>
             </div>
         </div>
-        {% else %}
-        <div style="grid-column:1/-1; text-align:center; padding:40px">No matches yet</div>
+
+        <div id="timerContainer"></div>
+
+        <div class="custom-timer-section">
+            <div class="custom-timer-header">
+                <h3>Custom Timers</h3>
+                <button class="btn-purple" onclick="addCustomTimerRow()">+ Add Custom Timer</button>
+            </div>
+            <div id="customTimerInputs"></div>
+            <div id="customTimerContainer"></div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="window.location.href='/'" style="background:#999;">Back</button>
+        </div>
+    </div>
+    {% else %}
+
+    {% if user and not user.is_judge %}
+    <div class="title">
+        <h2>Post a Match</h2>
+        <span class="post-link" onclick="openModal('postModal')">+ New Match</span>
+    </div>
+    {% endif %}
+
+    <h3>All Matches</h3>
+    <div class="grid">
+        {% for m in matches %}
+        <div class="card">
+            {% if m.premium %}<div class="premium-badge">PREMIUM</div>{% endif %}
+            <h3>{{ m.type }}</h3>
+            <p style="margin:6px 0; color:#555;">{{ m.time }}</p>
+            <p><strong>Judge:</strong> {{ m.judge }}</p>
+            <p><strong>Platform:</strong> {{ m.platform }}</p>
+            <p><strong>ID:</strong> {{ m.meeting_id }}</p>
+            <p><strong>Password:</strong> {{ m.meeting_pwd }}</p>
+            {% for t in m.teams %}<p style="margin-top:8px;"><strong>Team:</strong> {{ t }}</p>{% endfor %}
+            {% if user and user.email in ["ian@cactumatch.com", "roundmanager@cactumatch.com"] %}
+            <div style="display:flex; gap:8px; margin-top:14px;">
+                <button style="flex:1;" onclick="openJoinModal({{ loop.index0 }})">Join</button>
+                <button class="btn-red" style="width:100px;" onclick="if(confirm('Delete?')) window.location.href='/delete/{{ loop.index0 }}'">Delete</button>
+            </div>
+            {% else %}
+            <button style="width:100%; margin-top:14px;" onclick="openJoinModal({{ loop.index0 }})">Join</button>
+            {% endif %}
+        </div>
         {% endfor %}
     </div>
+    {% endif %}
 </div>
 
-<div class="modal" id="postModal">
+<!-- Join Modal -->
+<div class="modal" id="joinModal">
     <div class="modal-box">
-        <div class="modal-header">
-            <h3>Post a Match</h3>
-            <span class="close" onclick="closePost()">&times;</span>
-        </div>
+        <div class="modal-header"><h3>Join Match</h3><span class="close" onclick="closeModal('joinModal')">×</span></div>
         <div class="modal-body">
-            <form method="post" action="/post" onsubmit="closePost()">
-                <select name="type" required>
-                    <option value="LD">LD (1v1)</option>
-                    <option value="PF">PF (2v2)</option>
-                    <option value="BP">BP (3v3)</option>
-                </select>
-                <input type="datetime-local" name="time" required>
-                <input name="platform" placeholder="Platform" required>
-                <input name="judge" placeholder="Judge" required>
-                <input name="meeting_id" placeholder="Meeting ID" required>
-                <input name="meeting_pwd" placeholder="Password" required>
-
-                <div class="dropdown input-with-icon">
-                    <input name="teammate_user" placeholder="Teammate Email" oninput="search(this.value, 'res1')">
-                    <div class="info-icon" onclick="showTooltip()">i</div>
-                    <div class="result" id="res1"></div>
-                </div>
-
+            <form id="joinForm" method="post">
+                <input type="email" name="teammate_email" id="join_teammate_email" placeholder="Teammate Email" oninput="checkTeammateEmail('join')">
+                <div id="join_email_status" class="email-status"></div>
                 <div class="checkbox-row">
-                    <input type="checkbox" name="no_account" id="noacc">
-                    <label for="noacc">Partner has no account</label>
+                    <input type="checkbox" name="no_account" id="join_no_account" onchange="toggleTeammateName('join')">
+                    <label for="join_no_account">My teammate does not have an account</label>
                 </div>
-
-                <input name="teammate_manual" placeholder="Partner Name" disabled style="margin-top:8px">
-
-                <button class="btn-green" style="margin-top:12px; width:100%">Post Match</button>
+                <input type="text" name="teammate_name" id="join_teammate_name" placeholder="Teammate Name" class="hidden">
+                <button style="width:100%; margin-top:10px;">Join</button>
             </form>
         </div>
     </div>
 </div>
 
+<!-- Login Modal -->
 <div class="modal" id="authModal">
     <div class="modal-box">
-        <div class="tabs">
-            <div class="tab active" onclick="tab('login')">Login</div>
-            <div class="tab" onclick="tab('signup')">Sign Up</div>
-        </div>
-        <div class="form active" id="login">
+        <div class="modal-header"><h3>Account</h3><span class="close" onclick="closeModal('authModal')">×</span></div>
+        <div class="tabs"><div class="tab active" onclick="switchTab('login')">Login</div><div class="tab" onclick="switchTab('register')">Register</div></div>
+        <div class="form active" id="login-form">
+            {% if request.args.get('registered') == 'success' %}
+            <div style="background:#4CAF50; color:white; padding:12px; border-radius:8px; margin-bottom:16px; text-align:center; font-weight:500;">
+                ✓ You successfully created an account, please log in
+            </div>
+            {% endif %}
             <form method="post" action="/login">
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
-                <button>Login</button>
+                <button style="width:100%; margin-top:10px;">Login</button>
             </form>
         </div>
-        <div class="form" id="signup">
-            <form method="post" action="/register">
-                <input name="first_name" placeholder="First Name" required>
-                <input name="last_name" placeholder="Last Name" required>
+        <div class="form" id="register-form">
+            <form method="post" action="/register" onsubmit="return checkCV()">
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
-                <button>Sign Up</button>
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+                <div class="checkbox-row"><input type="checkbox" name="is_judge" id="is_judge"><label for="is_judge">Sign up as judge</label></div>
+                <textarea id="cv-input" name="cv" rows="4" placeholder="Your CV" required></textarea>
+                <button style="width:100%; margin-top:12px;">Register</button>
             </form>
         </div>
     </div>
 </div>
 
-<div class="upload-modal" id="uploadModal">
-    <div class="upload-box">
-        <h3>Change Avatar</h3>
-        <form method="post" action="/upload_avatar" enctype="multipart/form-data" style="margin-top:20px" onsubmit="document.getElementById('uploadModal').style.display='none'">
-            <input type="file" name="avatar" accept="image/*" required>
-            <button style="margin-top:16px">Upload</button>
-            <button type="button" style="background:#999;margin-left:8px" onclick="document.getElementById('uploadModal').style.display='none'">Cancel</button>
-        </form>
+<!-- Post Modal -->
+<div class="modal" id="postModal">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Post Match</h3><span class="close" onclick="closeModal('postModal')">×</span></div>
+        <div class="modal-body">
+            <form method="post" action="/post">
+                <select name="type"><option>LD</option><option>PF</option><option>BP</option></select>
+                <input type="datetime-local" name="time" required>
+                <input type="text" name="platform" placeholder="Platform" required>
+                <input type="text" name="judge" placeholder="Judge">
+                <div class="hint-text">Fill in if you already found one</div>
+                <input type="text" name="meeting_id" placeholder="Meeting ID" required>
+                <input type="text" name="meeting_pwd" placeholder="Meeting Password" required>
 
-        <div style="margin-top:24px; padding-top:20px; border-top:1px solid #eee;">
-            <h3 style="margin-bottom:14px;">Change Color</h3>
-            <form method="POST" action="/change-color" onsubmit="document.getElementById('uploadModal').style.display='none'">
-                <input type="color" name="color" value="{{ user.color }}" style="width:100%; height:42px; border-radius:8px; border:1px solid #ddd;">
-                <button style="margin-top:14px; width:100%;">Save Color</button>
+                <input type="email" name="teammate_email" id="post_teammate_email" placeholder="Teammate Email" oninput="checkTeammateEmail('post')">
+                <div id="post_email_status" class="email-status"></div>
+                <div class="checkbox-row">
+                    <input type="checkbox" name="no_account" id="post_no_account" onchange="toggleTeammateName('post')">
+                    <label for="post_no_account">My teammate does not have an account</label>
+                </div>
+                <input type="text" name="teammate_name" id="post_teammate_name" placeholder="Teammate Name" class="hidden">
+
+                {% if user and user.premium %}
+                <div class="checkbox-row"><input type="checkbox" name="level_restrict" id="lr"><label for="lr">Level Restrict</label></div>
+                {% endif %}
+                <button style="width:100%; margin-top:10px;">Post</button>
             </form>
         </div>
-
     </div>
 </div>
 
-<div class="tooltip-modal" id="tooltipModal">
-    <div class="tooltip-box">
-        <p>Please fill in the Email that your teammate used to register CactuMATCH</p>
-        <button style="margin-top:16px" onclick="closeTooltip()">OK</button>
-    </div>
-</div>
-
-<!-- 🔥 纯白登出全屏 -->
-<div class="logout-overlay" id="logoutOverlay">
-    Please Wait While We Log You Out
-</div>
-
-<script>
-function showAuth(m) {
-    document.getElementById('authModal').style.display = 'flex';
-    tab(m);
-}
-function tab(m) {
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.form').forEach(f=>f.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById(m).classList.add('active');
-}
-function closePost() {
-    document.getElementById('postModal').style.display='none';
-}
-function search(val, id) {
-    const r = document.getElementById(id);
-    if (!val || val.length<2) { r.style.display='none'; return; }
-    fetch('/api/users?q='+val).then(res=>res.json()).then(users=>{
-        r.innerHTML = '';
-        users.forEach(u=>{
-            const d = document.createElement('div');
-            d.innerText = u;
-            d.onclick = ()=>{
-                document.querySelector(`#${id}`).previousElementSibling.value = u;
-                r.style.display='none';
-            };
-            r.appendChild(d);
-        });
-        r.style.display = users.length ? 'block':'none';
-    });
-}
-document.querySelectorAll('.noaccjoin').forEach(cb=>{
-    cb.onchange = function(){
-        this.closest('form').querySelector('[name*="manual"]').disabled = !this.checked;
-    };
-});
-document.getElementById('noacc').onchange = function(){
-    document.querySelector('[name="teammate_manual"]').disabled = !this.checked;
-};
-
-function showTooltip() {
-    document.getElementById('tooltipModal').style.display = 'flex';
-}
-function closeTooltip() {
-    document.getElementById('tooltipModal').style.display = 'none';
-}
-
-// 头像菜单
-function toggleDropdown() {
-    let menu = document.getElementById("avatarMenu");
-    menu.style.display = menu.style.display == "block" ? "none" : "block";
-}
-function closeMenu() {
-    document.getElementById("avatarMenu").style.display = "none";
-}
-
-window.onclick = function(e) {
-    let menu = document.getElementById("avatarMenu");
-    let avatar = document.querySelector(".avatar");
-    if(menu && avatar && !avatar.contains(e.target)) {
-        menu.style.display = "none";
-    }
-
-    if(e.target===document.getElementById('authModal')) document.getElementById('authModal').style.display='none';
-    if(e.target===document.getElementById('uploadModal')) document.getElementById('uploadModal').style.display='none';
-    if(e.target===document.getElementById('postModal')) closePost();
-    if(e.target===document.getElementById('tooltipModal')) closeTooltip();
-};
-
-// 登出3秒纯白动画
-function showLogoutOverlay() {
-    let overlay = document.getElementById('logoutOverlay');
-    overlay.classList.add('active');
-    closeMenu();
-    setTimeout(()=>{
-        window.location.href = '/logout';
-    }, 3000);
-}
-</script>
-
-<!-- 管理员欢迎弹窗 -->
-{% if user and user.email == "ian@cactumatch.com" %}
-<div class="welcome-popup" id="welcome">
-    <span class="welcome-close" onclick="document.getElementById('welcome').remove()">&times;</span>
-    <img src="{{ url_for('static', filename='badges/gold-badge.png') }}" class="badge-img">
-    <div class="welcome-text">
-        <h2>Welcome, SUPER ADMIN</h2>
-    </div>
-</div>
-
-{% elif user and user.email == "roundmanager@cactumatch.com" %}
-<div class="welcome-popup" id="welcome">
-    <span class="welcome-close" onclick="document.getElementById('welcome').remove()">&times;</span>
-    <img src="{{ url_for('static', filename='badges/silver-badge.png') }}" class="badge-img">
-    <div class="welcome-text">
-        <h2>Welcome, ADMIN</h2>
+{% if user and user.email != "ian@cactumatch.com" %}
+<!-- CV Modal -->
+<div class="modal" id="cvModal">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Update CV</h3><span class="close" onclick="closeModal('cvModal')">×</span></div>
+        <div class="modal-body">
+            <form method="post" action="/update-cv">
+                <textarea name="new_cv" rows="6" placeholder="Your new CV" required></textarea>
+                <button style="width:100%; margin-top:10px;">Submit</button>
+            </form>
+        </div>
     </div>
 </div>
 {% endif %}
 
+<!-- Avatar Modal -->
+<div class="modal" id="avatarModal">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Change Avatar</h3><span class="close" onclick="closeModal('avatarModal')">×</span></div>
+        <div class="modal-body">
+            <form method="post" action="/upload_avatar" enctype="multipart/form-data">
+                <input type="file" name="avatar" accept="image/*" required>
+                <button style="width:100%; margin-top:10px;">Upload</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if user and user.email == "ian@cactumatch.com" %}
+<!-- Generate Code Modal -->
+<div class="modal" id="generateModal">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Generate Premium Code</h3><span class="close" onclick="closeModal('generateModal')">×</span></div>
+        <div class="modal-body">
+            <form method="post" action="/generate-code">
+                <select name="duration">
+                    <option value="7D">7 Days</option>
+                    <option value="1M" selected>1 Month</option>
+                    <option value="3M">3 Months</option>
+                    <option value="1Y">1 Year</option>
+                    <option value="2Y">2 Years</option>
+                </select>
+                <button style="width:100%; margin-top:10px;">Generate</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Set Level Modal -->
+<div class="modal" id="setLevelModal">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Force Set User Level</h3><span class="close" onclick="closeModal('setLevelModal')">×</span></div>
+        <div class="modal-body">
+            <form method="post" action="/set-level">
+                <input class="admin-input" type="email" name="email" placeholder="Enter user email" required>
+                <select class="admin-input" name="level" required>
+                    <option value="1">LV1</option>
+                    <option value="2">LV2</option>
+                    <option value="3">LV3</option>
+                    <option value="4">LV4</option>
+                    <option value="5">LV5</option>
+                    <option value="6">LV6</option>
+                </select>
+                <button style="width:100%; margin-top:10px;">Set Level</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Review CV Modal -->
+<div class="modal" id="reviewCVModal">
+    <div class="modal-box" style="width:600px;">
+        <div class="modal-header"><h3>Review CVs</h3><span class="close" onclick="closeModal('reviewCVModal')">×</span></div>
+        <div class="modal-body">
+            {% if evals|length == 0 %}
+            <p style="text-align:center; color:#999;">No pending CV reviews 🎉</p>
+            {% else %}
+            {% for e in evals %}
+            <div class="eval-item">
+                <strong>{{e.name}}</strong> ({{e.email}})
+                <span class="badge badge-{{'re' if e.type=='re' else 'pre'}}">{{'Re-Eval' if e.type=='re' else 'Pre-Eval'}}</span>
+                <p style="font-size:12px; color:#666;">{{e.time}}</p>
+                <p style="margin:6px 0;">{{e.cv}}</p>
+                <form method="post" action="/set-level" style="display:flex; gap:8px;">
+                    <input type="hidden" name="email" value="{{e.email}}">
+                    <select name="level" required style="flex:1;">
+                        <option value="1">LV1</option><option value="2">LV2</option><option value="3">LV3</option><option value="4">LV4</option><option value="5">LV5</option><option value="6">LV6</option>
+                    </select>
+                    <button>Set</button>
+                </form>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if user and user.email != "ian@cactumatch.com" %}
+<!-- Redeem Modal -->
+<div class="modal" id="redeemModal">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Redeem Premium</h3><span class="close" onclick="closeModal('redeemModal')">×</span></div>
+        <div class="modal-body">
+            <form method="post" action="/redeem-code">
+                <input type="text" name="code" placeholder="Enter your premium code" required>
+                <button style="width:100%; margin-top:10px;">Redeem</button>
+            </form>
+            <p class="redeem-note">
+                Thank you for supporting, but Premium is not open for purchase yet!<br>
+                There will be multiple chances to get Premium, be patient!
+            </p>
+            {% if redeem_confirm_code %}
+            <br>
+            <form method="post" action="/redeem-code">
+                <input type="hidden" name="code" value="{{ redeem_confirm_code }}">
+                <input type="hidden" name="force" value="1">
+                <button class="btn-red" style="width:100%;">Confirm Replace</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    let menuOpen = false;
+    let currentMatchIndex = 0;
+    let currentFormat = 'PF';
+    let timers = {};
+    let customTimers = {};
+    let customTimerCounter = 0;
+
+    const timerConfigs = {
+        'PF': [
+            {name: 'Constructive Speech(Pro/Con)', time: 240},
+            {name: 'Constructive Speech(Pro/con)', time: 240},
+            {name: 'Crossfire 1', time: 180},
+            {name: 'Rebuttal Speech(Pro/Con)', time: 240},
+            {name: 'Rebuttal Speech(Pro/Con)', time: 240},
+            {name: 'Summary(Pro/Con)', time: 180},
+            {name: 'Summary(Pro/Con)', time: 180},
+            {name: 'Grand Crossfire', time: 180},
+            {name: 'Final Focus(Pro/Con)', time: 120},
+            {name: 'Final Focus(Pro/Con)', time: 120}
+        ],
+        'LD': [
+            {name: 'Affirmative Constructive', time: 360},
+            {name: 'Cross-Examination(AFF)', time: 180},
+            {name: 'Negative Constructive', time: 420},
+            {name: 'Cross-Examination(NEG)', time: 180},
+            {name: '1st Affirmative Rebuttal', time: 240},
+            {name: 'Negative Rebuttal', time: 360},
+            {name: '2nd Affirmative Rebuttal', time: 180}
+        ],
+        'BP': [
+            {name: 'Prime Minister', time: 420},
+            {name: 'Leader of Opposition', time: 420},
+            {name: 'Deputy Prime Minister', time: 420},
+            {name: 'Deputy Leader of Opposition', time: 420},
+            {name: 'Member of Government', time: 420},
+            {name: 'Member of Opposition', time: 420},
+            {name: 'Government Whip', time: 420},
+            {name: 'Opposition Whip', time: 420}
+        ]
+    };
+
+    function toggleAvatarMenu() {
+        const m=document.getElementById("avatarMenu");
+        menuOpen=!menuOpen;
+        m.style.display=menuOpen?"block":"none";
+    }
+
+    function openModal(id) {
+        document.getElementById(id).style.display="flex";
+        if (id === 'timer') { initTimer(); }
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display="none";
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+        document.querySelectorAll(".form").forEach(f=>f.classList.remove("active"));
+        event.target.classList.add("active");
+        document.getElementById(tab+"-form").classList.add("active");
+    }
+
+    function checkCV() {
+        const cv=document.getElementById("cv-input").value;
+        if(!cv){ alert("Please enter CV"); return false; }
+        return true;
+    }
+
+    function openJoinModal(index) {
+        currentMatchIndex = index;
+        document.getElementById("joinForm").action = "/join/" + index;
+        document.getElementById("join_teammate_email").value = "";
+        document.getElementById("join_teammate_name").value = "";
+        document.getElementById("join_no_account").checked = false;
+        document.getElementById("join_teammate_name").classList.add("hidden");
+        document.getElementById("join_email_status").textContent = "";
+        openModal("joinModal");
+    }
+
+    function toggleTeammateName(prefix) {
+        const noAccount = document.getElementById(prefix + "_no_account").checked;
+        const teammateEmail = document.getElementById(prefix + "_teammate_email");
+        const teammateName = document.getElementById(prefix + "_teammate_name");
+        const emailStatus = document.getElementById(prefix + "_email_status");
+        if (noAccount) {
+            teammateEmail.disabled = true;
+            teammateEmail.value = "";
+            teammateName.classList.remove("hidden");
+            if (emailStatus) emailStatus.textContent = "";
+        } else {
+            teammateEmail.disabled = false;
+            teammateName.classList.add("hidden");
+            teammateName.value = "";
+        }
+    }
+
+    async function checkTeammateEmail(prefix) {
+        const email = document.getElementById(prefix + "_teammate_email").value;
+        const statusDiv = document.getElementById(prefix + "_email_status");
+        if (!email) { statusDiv.textContent = ""; return; }
+        try {
+            const response = await fetch('/api/check-email?email=' + encodeURIComponent(email));
+            const data = await response.json();
+            if (data.exists) {
+                statusDiv.textContent = "✓ User found: " + data.name;
+                statusDiv.className = "email-status valid";
+            } else {
+                statusDiv.textContent = "⚠ Email not registered, will display as entered";
+                statusDiv.className = "email-status invalid";
+            }
+        } catch (error) { statusDiv.textContent = ""; }
+    }
+
+    function setFormat(format) {
+        currentFormat = format;
+        document.querySelectorAll('.format-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        initTimer();
+    }
+
+    function initTimer() {
+        const container = document.getElementById('timerContainer');
+        if (!container) return;
+        const config = timerConfigs[currentFormat];
+        container.innerHTML = '';
+        config.forEach((item, index) => {
+            const timerId = `timer_${currentFormat}_${index}`;
+            timers[timerId] = { id: timerId, name: item.name, sec: item.time, remain: item.time, interval: null, running: false };
+            const card = document.createElement('div');
+            card.className = 'timer-card';
+            card.innerHTML = `
+                <h4>${item.name}</h4>
+                <div class="timer-display" id="display_${timerId}">${formatTime(item.time)}</div>
+                <div class="timer-controls">
+                    <button class="btn-green" onclick="startTimer('${timerId}')">Start</button>
+                    <button class="btn-orange" onclick="pauseTimer('${timerId}')">Pause</button>
+                    <button onclick="resetTimer('${timerId}')">Reset</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function formatTime(seconds) {
+        const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+        const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        if (h === '00') return `${m}:${s}`;
+        return `${h}:${m}:${s}`;
+    }
+
+    function startTimer(timerId) {
+        const timer = timers[timerId] || customTimers[timerId];
+        if (!timer || timer.running) return;
+        timer.running = true;
+        timer.interval = setInterval(() => {
+            if (timer.remain > 0) {
+                timer.remain--;
+                document.getElementById(`display_${timerId}`).textContent = formatTime(timer.remain);
+                if (timer.remain === 0) { pauseTimer(timerId); alert(`${timer.name} - Time's Up!`); }
+            }
+        }, 1000);
+    }
+
+    function pauseTimer(timerId) {
+        const timer = timers[timerId] || customTimers[timerId];
+        if (!timer) return;
+        timer.running = false;
+        if (timer.interval) { clearInterval(timer.interval); timer.interval = null; }
+    }
+
+    function resetTimer(timerId) {
+        const timer = timers[timerId] || customTimers[timerId];
+        if (!timer) return;
+        pauseTimer(timerId);
+        timer.remain = timer.sec;
+        document.getElementById(`display_${timerId}`).textContent = formatTime(timer.remain);
+    }
+
+    function addCustomTimerRow() {
+        const container = document.getElementById('customTimerInputs');
+        const rowId = `custom_row_${customTimerCounter}`;
+        const row = document.createElement('div');
+        row.id = rowId;
+        row.style.cssText = 'background:#fff; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #e0e0e0;';
+        row.innerHTML = `
+            <input type="text" id="name_${rowId}" placeholder="Timer Name (optional)" style="margin-bottom:10px;">
+            <div class="time-input-group">
+                <input type="number" id="minutes_${rowId}" placeholder="Min" min="0" value="0" style="width:100px;">
+                <span>:</span>
+                <input type="number" id="seconds_${rowId}" placeholder="Sec" min="0" max="59" value="0" style="width:100px;">
+                <button class="btn-green" onclick="createCustomTimer('${rowId}')" style="width:auto; padding:10px 20px;">Create</button>
+                <button class="btn-red" onclick="document.getElementById('${rowId}').remove()" style="width:auto; padding:10px 20px;">Cancel</button>
+            </div>
+            <div class="hint-text" style="margin-top:8px;">Enter minutes and seconds (e.g., 1 min 30 sec)</div>
+        `;
+        container.appendChild(row);
+        customTimerCounter++;
+    }
+
+    function createCustomTimer(rowId) {
+        const nameInput = document.getElementById(`name_${rowId}`);
+        const minutesInput = document.getElementById(`minutes_${rowId}`);
+        const secondsInput = document.getElementById(`seconds_${rowId}`);
+        let minutes = parseInt(minutesInput.value) || 0;
+        let seconds = parseInt(secondsInput.value) || 0;
+        if (minutes === 0 && seconds === 0) { alert('Please enter a time greater than 0'); return; }
+        const totalSeconds = (minutes * 60) + seconds;
+        const timerName = nameInput.value.trim() || `Custom Timer ${Object.keys(customTimers).length + 1}`;
+        const timerId = `custom_${Date.now()}_${Math.random()}`;
+        customTimers[timerId] = { id: timerId, name: timerName, sec: totalSeconds, remain: totalSeconds, interval: null, running: false };
+        document.getElementById(rowId).remove();
+        renderCustomTimer(timerId);
+    }
+
+    function renderCustomTimer(timerId) {
+        const container = document.getElementById('customTimerContainer');
+        const timer = customTimers[timerId];
+        const card = document.createElement('div');
+        card.id = `card_${timerId}`;
+        card.className = 'timer-card';
+        card.style.background = '#fff3e0';
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h4>${timer.name}</h4>
+                <button class="btn-red" onclick="deleteCustomTimer('${timerId}')" style="width:auto; padding:5px 15px;">Delete</button>
+            </div>
+            <div class="timer-display" id="display_${timerId}">${formatTime(timer.remain)}</div>
+            <div class="timer-controls">
+                <button class="btn-green" onclick="startTimer('${timerId}')">Start</button>
+                <button class="btn-orange" onclick="pauseTimer('${timerId}')">Pause</button>
+                <button onclick="resetTimer('${timerId}')">Reset</button>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+
+    function deleteCustomTimer(timerId) {
+        const timer = customTimers[timerId];
+        if (timer && timer.interval) { clearInterval(timer.interval); }
+        delete customTimers[timerId];
+        document.getElementById(`card_${timerId}`).remove();
+    }
+
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById("avatarMenu");
+        const avatarRow = document.querySelector(".avatar-row");
+        if (menu && avatarRow && !avatarRow.contains(event.target) && !menu.contains(event.target)) {
+            menu.style.display = "none";
+            menuOpen = false;
+        }
+    });
+
+    window.addEventListener('load', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('registered') === 'success') {
+            openModal('authModal');
+            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+            document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
+            document.querySelector(".tab:first-child").classList.add("active");
+            document.getElementById("login-form").classList.add("active");
+        }
+    });
+</script>
 </body>
 </html>
