@@ -1,0 +1,512 @@
+[
+  {
+    "rid": "071732",
+    "time": "2026-05-24 13:30",
+    "type": "LD",
+    "platform": "Tencent",
+    "meeting_id": "sdfa",
+    "meeting_pwd": "dgaeg",
+    "teams": [
+      "(Ian Admin)",
+      "(Henry Zheng)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Ian Admin",
+            "email": "ian@cactumatch.com",
+            "uid": "63186951"
+          }
+        ]
+      },
+      {
+        "team_index": 1,
+        "members": [
+          {
+            "name": "Henry Zheng",
+            "email": "henryzheng1402@qq.com",
+            "uid": "03292556"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Ian Admin",
+        "email": "ian@cactumatch.com",
+        "uid": "63186951"
+      },
+      {
+        "name": "Henry Zheng",
+        "email": "henryzheng1402@qq.com",
+        "uid": "03292556"
+      }
+    ],
+    "judge": "M S",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-24 13:04:22"
+  },
+  {
+    "rid": "118533",
+    "time": "2026-05-24 13:48",
+    "type": "LD",
+    "platform": "idk",
+    "meeting_id": "Ian",
+    "meeting_pwd": "Ian",
+    "teams": [
+      "(Henry Zheng)",
+      "(Nolan Chen)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Henry Zheng",
+            "email": "henryzheng1402@qq.com",
+            "uid": "03292556"
+          }
+        ]
+      },
+      {
+        "team_index": 1,
+        "members": [
+          {
+            "name": "Nolan Chen",
+            "email": "nuo.chen@beta.com",
+            "uid": "20016"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Henry Zheng",
+        "email": "henryzheng1402@qq.com",
+        "uid": "03292556"
+      },
+      {
+        "name": "Nolan Chen",
+        "email": "nuo.chen@beta.com",
+        "uid": "20016"
+      }
+    ],
+    "judge": "M S",
+    "author": "henryzheng1402@qq.com",
+    "author_name": "Henry Zheng",
+    "completed": true,
+    "completed_time": "2026-05-23 07:42:11"
+  },
+  {
+    "rid": "183083",
+    "time": "2026-06-20 20:00",
+    "type": "LD",
+    "platform": "Tencent",
+    "meeting_id": "123456789",
+    "meeting_pwd": "987654321",
+    "teams": [
+      "(Ian Admin)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Ian Admin",
+            "email": "ian@cactumatch.com",
+            "uid": "63186951"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Ian Admin",
+        "email": "ian@cactumatch.com",
+        "uid": "63186951"
+      }
+    ],
+    "judge": "Dolce Tang",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:52"
+  },
+  {
+    "rid": "865482",
+    "time": "2026-05-30 20:00",
+    "type": "LD",
+    "platform": "awe",
+    "meeting_id": "asdf",
+    "meeting_pwd": "asdfas",
+    "teams": [
+      "(Ian Ye)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Ian Ye",
+            "email": "ianye1412@gmail.com",
+            "uid": "50847344"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Ian Ye",
+        "email": "ianye1412@gmail.com",
+        "uid": "50847344"
+      }
+    ],
+    "judge": "Not specified",
+    "author": "ianye1412@gmail.com",
+    "author_name": "Ian Ye",
+    "completed": true,
+    "completed_time": "2026-05-29 12:49:37"
+  },
+  {
+    "rid": "592290",
+    "time": "2026-05-30 20:20",
+    "type": "LD",
+    "platform": "srdg",
+    "meeting_id": "werf",
+    "meeting_pwd": "awes",
+    "teams": [
+      "(Ian Ye)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Ian Ye",
+            "email": "ianye1412@gmail.com",
+            "uid": "50847344"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Ian Ye",
+        "email": "ianye1412@gmail.com",
+        "uid": "50847344"
+      }
+    ],
+    "judge": "Not specified",
+    "author": "ianye1412@gmail.com",
+    "author_name": "Ian Ye",
+    "completed": true,
+    "completed_time": "2026-05-29 12:49:33"
+  },
+  {
+    "rid": "107329",
+    "time": "2026-05-30 20:20",
+    "type": "LD",
+    "platform": "awef",
+    "meeting_id": "sdvf",
+    "meeting_pwd": "sedf",
+    "teams": [
+      "(Ian Ye)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Ian Ye",
+            "email": "ianye1412@gmail.com",
+            "uid": "50847344"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Ian Ye",
+        "email": "ianye1412@gmail.com",
+        "uid": "50847344"
+      }
+    ],
+    "judge": "asdfv",
+    "author": "ianye1412@gmail.com",
+    "author_name": "Ian Ye",
+    "completed": true,
+    "completed_time": "2026-05-29 12:49:21"
+  },
+  {
+    "rid": "586912",
+    "time": "2026-05-30 20:37",
+    "type": "LD",
+    "platform": "awe",
+    "meeting_id": "awef",
+    "meeting_pwd": "asdf",
+    "teams": [
+      "(Ian Ye)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "Ian Ye",
+            "email": "ianye1412@gmail.com",
+            "uid": "50847344"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "Ian Ye",
+        "email": "ianye1412@gmail.com",
+        "uid": "50847344"
+      }
+    ],
+    "judge": "Not specified",
+    "author": "ianye1412@gmail.com",
+    "author_name": "Ian Ye",
+    "completed": true,
+    "completed_time": "2026-05-29 12:49:29"
+  },
+  {
+    "rid": "401577",
+    "time": "2026-05-30 20:43",
+    "type": "LD",
+    "platform": "Tencent",
+    "meeting_id": "awer",
+    "meeting_pwd": "asefd",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "Not specified",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 12:49:25"
+  },
+  {
+    "rid": "143671",
+    "time": "2026-05-30 20:49",
+    "type": "LD",
+    "platform": "asdf",
+    "meeting_id": "asdv",
+    "meeting_pwd": "asdf",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "adsf",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 12:49:17"
+  },
+  {
+    "rid": "041655",
+    "time": "2026-05-30 21:11",
+    "type": "LD",
+    "platform": "agsdaf",
+    "meeting_id": "asdfc",
+    "meeting_pwd": "sdfgaa",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "Not specified",
+    "judge_email": "",
+    "judge_type_restriction": "professional_judge",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:48"
+  },
+  {
+    "rid": "273258",
+    "time": "2026-05-30 21:11",
+    "type": "LD",
+    "platform": "awes",
+    "meeting_id": "awef",
+    "meeting_pwd": "awef",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "Not specified",
+    "judge_email": "",
+    "judge_type_restriction": "any",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:44"
+  },
+  {
+    "rid": "529828",
+    "time": "2026-05-30 21:12",
+    "type": "LD",
+    "platform": "awes",
+    "meeting_id": "asdf",
+    "meeting_pwd": "asdf",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "awef",
+    "judge_email": "",
+    "judge_type_restriction": "any",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:31"
+  },
+  {
+    "rid": "497428",
+    "time": "2026-05-30 21:12",
+    "type": "LD",
+    "platform": "awer",
+    "meeting_id": "awer",
+    "meeting_pwd": "awer",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "awer",
+    "judge_email": "",
+    "judge_type_restriction": "any",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:39"
+  },
+  {
+    "rid": "371710",
+    "time": "2026-05-30 21:13",
+    "type": "LD",
+    "platform": "awef",
+    "meeting_id": "feaw",
+    "meeting_pwd": "awef",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "awef",
+    "judge_email": "",
+    "judge_type_restriction": "any",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:35"
+  },
+  {
+    "rid": "118772",
+    "time": "2026-05-30 21:13",
+    "type": "LD",
+    "platform": "awfea",
+    "meeting_id": "awef",
+    "meeting_pwd": "wef",
+    "teams": [
+      "(Waiting...)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": []
+      }
+    ],
+    "participants": [],
+    "judge": "awef",
+    "judge_email": "",
+    "judge_type_restriction": "student_judge",
+    "author": "ian@cactumatch.com",
+    "author_name": "Ian Admin",
+    "completed": true,
+    "completed_time": "2026-05-29 13:14:26"
+  },
+  {
+    "rid": "094428",
+    "time": "2026-06-30 20:21",
+    "type": "PF",
+    "platform": "My House",
+    "meeting_id": "67-78-91",
+    "meeting_pwd": "My birthday",
+    "teams": [
+      "(William Lin)"
+    ],
+    "teams_data": [
+      {
+        "team_index": 0,
+        "members": [
+          {
+            "name": "William Lin",
+            "email": "69460231@qq.com",
+            "uid": "74907"
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "name": "William Lin",
+        "email": "69460231@qq.com",
+        "uid": "74907"
+      }
+    ],
+    "judge": "3 judges: My mom, My dad, and my dog",
+    "judge_email": "",
+    "judge_type_restriction": "any",
+    "author": "69460231@qq.com",
+    "author_name": "William Lin",
+    "completed": true,
+    "completed_time": "2026-06-02 10:44:46"
+  }
+]
