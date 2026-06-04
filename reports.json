@@ -1,0 +1,85 @@
+[
+  {
+    "id": "report_1_1778250153",
+    "match_index": 0,
+    "reporter": "ian@cactumatch.com",
+    "reason": "Invalid Meeting ID",
+    "details": "",
+    "time": "2026-05-08 14:22",
+    "status": "dismissed",
+    "henry_decision": null,
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "report_2_1778250310",
+    "match_index": 0,
+    "reporter": "ian@cactumatch.com",
+    "reason": "Invalid Meeting ID",
+    "details": "",
+    "time": "2026-05-08 14:25",
+    "status": "dismissed",
+    "henry_decision": null,
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "RPT0003",
+    "rid": "612730",
+    "reporter": "ian@cactumatch.com",
+    "reason": "Invalid Password",
+    "details": "",
+    "time": "2026-05-09 00:19",
+    "status": "dismissed",
+    "henry_decision": null,
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "RPT-20260523053144-475",
+    "rid": "071732",
+    "reporter": "ian@cactumatch.com",
+    "reason": "Invalid Meeting ID",
+    "details": "",
+    "status": "dismissed",
+    "time": "2026-05-23 05:31:44",
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "RPT-20260529092235-942",
+    "rid": "183083",
+    "reporter": "ian@cactumatch.com",
+    "reason": "Opponent Not There",
+    "details": "",
+    "status": "dismissed",
+    "time": "2026-05-29 09:22:35",
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "RPT-20260529092236-276",
+    "rid": "183083",
+    "reporter": "ian@cactumatch.com",
+    "reason": "Opponent Not There",
+    "details": "",
+    "status": "dismissed",
+    "time": "2026-05-29 09:22:36",
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "RPT-20260529092237-980",
+    "rid": "183083",
+    "reporter": "ian@cactumatch.com",
+    "reason": "Opponent Not There",
+    "details": "",
+    "status": "dismissed",
+    "time": "2026-05-29 09:22:37",
+    "ian_decision": "dismissed"
+  },
+  {
+    "id": "RPT-20260601142919-941",
+    "rid": "094428",
+    "reporter": "69460231@qq.com",
+    "reason": "Other",
+    "details": "how to delete this shit",
+    "status": "dismissed",
+    "time": "2026-06-01 14:29:19",
+    "ian_decision": "dismissed"
+  }
+]
