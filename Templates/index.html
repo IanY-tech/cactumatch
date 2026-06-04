@@ -1,236 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
+    <link rel="icon" type="image/png" href="/static/icon-192.png">
+    <link rel="manifest" href="data:application/json,{"name":"CactuMATCH","short_name":"CactuMATCH","start_url":"/","display":"standalone","background_color":"#0a0a0a","theme_color":"#0a0a0a","icons":[{"src":"/static/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"/static/icon-512.png","sizes":"512x512","type":"image/png"}]}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js');
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CactuMATCH</title>
-        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background:#f5f7fa; color:#333; }
-        .top { position:fixed; top:0; left:0; right:0; height:60px; background:#00B497; color:#fff; border-bottom:1px solid #00A086; display:flex; justify-content:space-between; align-items:center; padding:0 30px; z-index:99999; }
-        .logo { font-size:20px; font-weight:600; color:#fff; }
-        .logo span { font-size:12px; opacity:0.8; margin-left:8px; font-weight:400; }
-        .user { display:flex; align-items:center; gap:12px; }
-
-        .nav-btn-login {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+        :root {
+            --bg: #0a0a0f; --bg-secondary: #111118; --bg-card: #16161f;
+            --bg-card-hover: #1c1c28; --bg-glass: rgba(22, 22, 31, 0.85);
+            --bg-input: #1a1a25; --border: #252530; --border-light: #2a2a38;
+            --text: #e8e8f0; --text-secondary: #a0a0b8; --text-muted: #606078;
+            --primary: #00ffa3; --primary-glow: rgba(0, 255, 163, 0.3); --primary-dim: #00cc82;
+            --accent: #ff6b9d; --accent-glow: rgba(255, 107, 157, 0.3);
+            --gold: #ffd700; --gold-glow: rgba(255, 215, 0, 0.4);
+            --purple: #b44dff; --purple-glow: rgba(180, 77, 255, 0.3);
+            --red: #ff4757; --red-glow: rgba(255, 71, 87, 0.3);
+            --orange: #ff9f43; --green: #2ed573; --blue: #4dabf7;
+            --radius-sm: 8px; --radius: 14px; --radius-lg: 20px; --radius-xl: 28px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .nav-btn-login:hover {
-            background: rgba(255,255,255,0.25);
-            border-color: rgba(255,255,255,0.5);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            background-image: radial-gradient(ellipse at 20% 20%, rgba(0, 255, 163, 0.03) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(180, 77, 255, 0.03) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(255, 107, 157, 0.02) 0%, transparent 50%);
+            color: var(--text); font-family: 'Space Grotesk', 'Outfit', sans-serif;
+            line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh;
         }
-
-        .nav-btn-home {
-            background: transparent;
-            color: #fff;
-            border: 1.5px solid rgba(255,255,255,0.6);
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.1), transparent), radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.08), transparent), radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.1), transparent), radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.06), transparent), radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.1), transparent), radial-gradient(2px 2px at 40% 70%, rgba(0,255,163,0.15), transparent), radial-gradient(2px 2px at 75% 15%, rgba(180,77,255,0.12), transparent), radial-gradient(2px 2px at 25% 45%, rgba(255,107,157,0.1), transparent);
+            pointer-events: none; z-index: 0;
         }
-        .nav-btn-home:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: #fff;
+        .top {
+            position: fixed; top: 12px; left: 16px; right: 16px; height: 60px;
+            background: var(--bg-glass); backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%); color: var(--text);
+            border: 1px solid var(--border); border-radius: var(--radius-xl);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 24px; z-index: 99999; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
-
-        .nav-btn-premium {
-            background: transparent;
-            color: #FFD700;
-            border: 1.5px solid #FFD700;
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease;
+        .logo {
+            font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #00e5ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px;
         }
-        .nav-btn-premium:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: #FFE44D;
-            color: #FFE44D;
-            transform: translateY(-1px);
+        .logo-icon {
+            width: 34px; height: 34px; background: linear-gradient(135deg, var(--primary), #00e5ff);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; box-shadow: 0 0 20px var(--primary-glow);
         }
-
-        .avatar-row { display:flex; align-items:center; gap:8px; }
-        .avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:600; font-size:14px; cursor:pointer; }
-        .avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
-        .username { color:white; font-size:14px; font-weight:500; }
-        .premium-name-badge { background:linear-gradient(90deg,#FFD700,#FFB900); color:#713F12; font-size:12px; padding:2px 6px; border-radius:10px; font-weight:bold; }
-
-        .lv-badge {
-            font-size: 12px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: bold;
-            color: #fff;
+        .logo span {
+            font-size: 10px; opacity: 0.7; margin-left: 8px; font-weight: 500;
+            letter-spacing: 1px; padding: 3px 10px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            color: var(--text-secondary); -webkit-text-fill-color: var(--text-secondary);
         }
-        .lv1 { background: #909399; }
-        .lv2 { background: #67C23A; }
-        .lv3 { background: #409EFF; }
-        .lv4 { background: #8E44AD; }
-        .lv5 { background: #E74C3C; }
-        .lv6 { background: #FFD700; color: #713F12; }
-
-        #avatarMenu { z-index:9999999; position:absolute; top:50px; right:20px; background:white; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.2); width:200px; display:none; }
-        #avatarMenu div { padding:10px 16px; cursor:pointer; color:#333; }
-        #avatarMenu div:hover { background:#f5f7fa; }
-        .premium-entry { color:#F59E0B !important; font-weight:600; }
-        .gold-admin { color:#FFD700 !important; font-weight:600; }
-        .purple-admin { color:#9C27B0 !important; font-weight:600; }
-        .red-admin { color:#f44336 !important; font-weight:600; }
-        .logout-item { color:#f44336 !important; font-weight:600; }
-        .menu-divider { height:1px; background:#e0e0e0; margin:8px 0; padding:0 !important; cursor:default !important; pointer-events:none; }
-        .main { margin-top:80px; padding:20px 40px; max-width:1600px; margin-left:auto; margin-right:auto; }
-        .title { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
-        .title h2 { font-size:22px; color:#2d3436; }
-        .post-link { font-size:14px; color:#1890ff; cursor:pointer; }
-        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; }
-        .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 2px 12px rgba(0,0,0,0.04); border:1px solid #e8e8e8; position:relative; }
-        .premium-badge { background:linear-gradient(90deg,#FFD700,#FFB900); color:#713F12; font-weight:bold; font-size:12px; padding:3px 8px; border-radius:12px; }
-        input, select { width:100%; padding:10px 14px; margin:8px 0; border:1px solid #e8e8e8; border-radius:8px; outline:none; }
-        button { padding:10px 20px; background:#1890ff; color:white; border:none; border-radius:8px; cursor:pointer; }
-        .btn-red { background:#f44336 !important; }
-        .btn-green { background:#4CAF50 !important; }
-        .btn-orange { background:#FF9800 !important; }
-        .btn-purple { background:#9C27B0 !important; }
-        .flash { background:#ffebee; color:#d32f2f; padding:12px; border-radius:8px; margin-bottom:16px; }
-        .flash-success { background:#4CAF50; color:white; padding:12px; border-radius:8px; margin-bottom:16px; text-align:center; }
-        .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center; }
-        .modal-box { background:white; width:500px; border-radius:12px; overflow:hidden; max-height:90vh; overflow-y:auto; }
-        .modal-header { padding:16px 24px; background:#fafafa; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
-        .modal-body { padding:24px; }
-        .close { cursor:pointer; font-size:20px; }
-        .tabs { display:flex; }
-        .tab { flex:1; padding:16px; text-align:center; cursor:pointer; background:#f5f7fa; }
-        .tab.active { background:white; font-weight:bold; color:#1890ff; }
-        .form { padding:24px; display:none; }
-        .form.active { display:block; }
-        .checkbox-row { display:flex; align-items:center; gap:6px; margin-top:6px; font-size:14px; }
-        .checkbox-row input { width:auto; }
-        .eval-item { background:#fff; padding:12px; border-radius:8px; margin-bottom:8px; border-left:4px solid #1890ff; }
-        .eval-item .badge { font-size:12px; padding:2px 6px; border-radius:4px; color:#fff; margin-left:6px; }
-        .badge-pre { background:#009688; }
-        .badge-re { background:#FF5722; }
-        .admin-input { margin-bottom:10px; }
-        .hidden { display:none; }
-        .hint-text { font-size:12px; color:#999; margin-top:-5px; margin-bottom:8px; }
-        .timer-display { font-size:48px; font-weight:bold; text-align:center; margin:20px 0; font-family:monospace; }
-        .timer-card { background:#f5f7fa; padding:20px; border-radius:8px; margin-bottom:15px; }
-        .timer-controls { display:flex; gap:10px; margin-top:15px; }
-        .timer-controls button { flex:1; }
-        .format-selector { margin-bottom:20px; }
-        .format-buttons { display:flex; gap:10px; margin-top:10px; }
-        .format-btn { flex:1; padding:10px; background:#e0e0e0; color:#333; }
-        .format-btn.active { background:#00B497; color:white; }
-        .email-status { font-size:12px; margin-top:-5px; margin-bottom:8px; }
-        .email-status.valid { color:#4CAF50; }
-        .email-status.invalid { color:#f44336; }
-        .custom-timer-section { margin-top:40px; padding-top:30px; border-top:2px solid #e0e0e0; }
-        .time-input-group { display:flex; gap:10px; align-items:center; }
-        .time-input-group input { width:80px; text-align:center; }
-        .time-input-group span { font-size:18px; font-weight:bold; }
-        .custom-timer-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
-        .custom-timer-header h3 { color:#333; }
-        .redeem-note { margin-top:16px; font-size:13px; color:#888; text-align:center; }
-
-        /* CV Review Notification */
-        .cv-notification {
-            background: #fff;
-            border: 1px solid #e8e8e8;
-            border-left: 4px solid #9C27B0;
-            border-radius: 8px;
-            padding: 14px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        .user { display: flex; align-items: center; gap: 8px; }
+        .nav-btn {
+            padding: 8px 18px; border-radius: 25px; cursor: pointer; font-size: 13px;
+            font-weight: 600; transition: all var(--transition); font-family: inherit;
+            letter-spacing: 0.3px; border: 1px solid transparent;
         }
-        .cv-notification-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .nav-btn-login { background: linear-gradient(135deg, var(--primary-dim), #00ccaa); color: #000; border: none; box-shadow: 0 0 20px var(--primary-glow); }
+        .nav-btn-login:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--primary-glow), 0 8px 20px rgba(0,0,0,0.3); }
+        .nav-btn-home { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border-light); }
+        .nav-btn-home:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+        .nav-btn-premium { background: transparent; color: var(--gold); border: 2px solid var(--gold); box-shadow: 0 0 15px var(--gold-glow); animation: premiumPulse 3s ease-in-out infinite; }
+        @keyframes premiumPulse { 0%, 100% { box-shadow: 0 0 15px var(--gold-glow); } 50% { box-shadow: 0 0 30px var(--gold-glow), 0 0 50px rgba(255,215,0,0.2); } }
+        .nav-btn-premium:hover { background: rgba(255, 215, 0, 0.1); border-color: #fff3a0; color: #fff3a0; transform: translateY(-2px); box-shadow: 0 0 40px var(--gold-glow); }
+        .avatar-row { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 12px; border-radius: 25px; transition: all var(--transition); border: 1px solid transparent; }
+        .avatar-row:hover { background: rgba(255,255,255,0.05); border-color: var(--border-light); }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 0 15px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.2); transition: all var(--transition); }
+        .avatar-row:hover .avatar { border-color: rgba(255,255,255,0.5); box-shadow: 0 0 25px rgba(0,0,0,0.4); }
+        .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .username { color: var(--text); font-size: 13px; font-weight: 600; }
+        .premium-name-badge { background: linear-gradient(135deg, var(--gold), #ffb700); color: #000; font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 800; }
+        .lv-badge { font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 800; }
+        .lv1 { background: #636674; } .lv2 { background: #2ed573; color: #000; } .lv3 { background: var(--blue); color: #000; } .lv4 { background: var(--purple); } .lv5 { background: var(--red); } .lv6 { background: var(--gold); color: #000; }
+        .badge-student-judge { background: var(--blue); color: #000; font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 800; }
+        .badge-pro-judge { background: var(--orange); color: #000; font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 800; }
+        #avatarMenu { z-index: 9999999; position: absolute; top: 58px; right: 4px; background: var(--bg-card); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: 0 20px 60px rgba(0,0,0,0.6); width: 260px; display: none; overflow: hidden; animation: menuSlide 0.2s ease; }
+        @keyframes menuSlide { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        #avatarMenu div { padding: 13px 20px; cursor: pointer; color: var(--text-secondary); font-size: 13px; font-weight: 500; transition: all 0.15s ease; border-left: 2px solid transparent; }
+        #avatarMenu div:hover { background: rgba(255,255,255,0.04); color: var(--text); border-left: 2px solid var(--primary); }
+        .menu-divider { height: 1px; background: var(--border); margin: 4px 0; padding: 0 !important; cursor: default !important; pointer-events: none; border-left: none !important; }
+        .menu-uid { pointer-events: none !important; cursor: default !important; font-size: 13px !important; color: var(--primary) !important; padding: 12px 20px !important; text-align: center; letter-spacing: 2px; font-weight: 700 !important; background: rgba(0, 255, 163, 0.05); border-bottom: 1px solid var(--border); }
+        .menu-uid:hover { background: rgba(0, 255, 163, 0.05) !important; border-left: 2px solid transparent !important; }
+        .main { margin-top: 92px; padding: 20px 24px; max-width: 1600px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        .title { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+        .title h2 { font-family: 'Outfit', sans-serif; font-size: 28px; background: linear-gradient(135deg, var(--text), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; letter-spacing: -1px; }
+        .post-link { font-size: 13px; color: var(--primary); cursor: pointer; font-weight: 700; padding: 10px 20px; background: rgba(0, 255, 163, 0.08); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 25px; transition: all var(--transition); letter-spacing: 0.3px; }
+        .post-link:hover { background: rgba(0, 255, 163, 0.15); border-color: var(--primary); box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; position: relative; transition: all var(--transition); display: flex; flex-direction: column; min-height: 420px; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0; transition: opacity var(--transition); }
+        .card:hover::before { opacity: 1; }
+        .card:hover { border-color: var(--border-light); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(0,255,163,0.05); background: var(--bg-card-hover); }
+        .premium-badge { font-weight: 800; font-size: 10px; padding: 5px 14px; border-radius: 20px; letter-spacing: 1px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
+        .badge-official { background: rgba(180, 77, 255, 0.15); color: var(--purple); border: 1px solid rgba(180, 77, 255, 0.3); box-shadow: 0 0 15px var(--purple-glow); }
+        .badge-premium { background: rgba(255, 215, 0, 0.1); color: var(--gold); border: 1px solid rgba(255, 215, 0, 0.2); }
+        input, select, textarea { width: 100%; padding: 12px 16px; margin: 8px 0; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none; font-family: inherit; font-size: 14px; color: var(--text); transition: all var(--transition); }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow), inset 0 0 20px rgba(0,255,163,0.03); background: #1e1e2a; }
+        input::placeholder, textarea::placeholder { color: var(--text-muted); }
+        button { padding: 12px 24px; background: var(--primary-dim); color: #000; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 700; font-size: 13px; transition: all var(--transition); font-family: inherit; letter-spacing: 0.3px; text-transform: uppercase; }
+        button:hover { background: var(--primary); box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); }
+        button:active { transform: scale(0.97); }
+        .btn-red { background: var(--red) !important; color: #fff !important; } .btn-red:hover { box-shadow: 0 0 25px var(--red-glow) !important; }
+        .btn-green { background: var(--green) !important; color: #000 !important; } .btn-green:hover { box-shadow: 0 0 25px rgba(46, 213, 115, 0.4) !important; }
+        .btn-orange { background: var(--orange) !important; color: #000 !important; } .btn-orange:hover { box-shadow: 0 0 25px rgba(255, 159, 67, 0.4) !important; }
+        .btn-purple { background: var(--purple) !important; } .btn-purple:hover { box-shadow: 0 0 25px var(--purple-glow) !important; }
+        .flash { background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.3); color: #ff6b7d; padding: 14px 20px; border-radius: var(--radius); margin-bottom: 24px; font-weight: 500; backdrop-filter: blur(10px); }
+        .flash-success { background: rgba(46, 213, 115, 0.1); border: 1px solid rgba(46, 213, 115, 0.3); color: #5dffa0; padding: 14px 20px; border-radius: var(--radius); margin-bottom: 24px; text-align: center; font-weight: 600; backdrop-filter: blur(10px); }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box { background: var(--bg-card); border: 1px solid var(--border); width: 520px; border-radius: var(--radius-lg); overflow: hidden; max-height: 88vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.7); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { padding: 20px 28px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+        .modal-body { padding: 28px; }
+        .close { cursor: pointer; font-size: 24px; color: var(--text-muted); transition: all var(--transition); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.03); }
+        .close:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+        .tabs { display: flex; border-bottom: 1px solid var(--border); }
+        .tab { flex: 1; padding: 16px; text-align: center; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: all var(--transition); border-bottom: 2px solid transparent; margin-bottom: -1px; font-size: 14px; }
+        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); background: rgba(0, 255, 163, 0.03); }
+        .tab:hover { color: var(--text); }
+        .form { padding: 28px; display: none; } .form.active { display: block; }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 13px; color: var(--text-secondary); }
+        .checkbox-row input { width: auto; accent-color: var(--primary); }
+        .cv-notification { background: rgba(180, 77, 255, 0.08); border: 1px solid rgba(180, 77, 255, 0.2); border-radius: var(--radius-lg); padding: 18px 28px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
+        .cv-notification-left { display: flex; align-items: center; gap: 14px; }
+        .cv-notification-text { font-size: 14px; color: var(--text); font-weight: 600; }
+        .cv-notification-badge { background: var(--purple); color: white; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 20px; box-shadow: 0 0 20px var(--purple-glow); }
+        .section-tabs { display: flex; gap: 6px; margin-bottom: 32px; background: var(--bg-secondary); padding: 5px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .section-tab { padding: 12px 28px; cursor: pointer; font-weight: 600; color: var(--text-muted); border-radius: var(--radius-sm); transition: all var(--transition); font-size: 13px; }
+        .section-tab.active { color: #000; background: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .section-tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.03); }
+        .timer-page { max-width: 900px; margin: 0 auto; }
+        .timer-page h2 { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 32px; background: linear-gradient(135deg, var(--primary), #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .format-selector { margin-bottom: 36px; }
+        .format-selector label { font-weight: 600; color: var(--text-secondary); margin-bottom: 14px; display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .format-buttons { display: flex; gap: 8px; background: var(--bg-secondary); padding: 6px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .format-btn { flex: 1; padding: 14px 20px; background: transparent; color: var(--text-muted); border-radius: var(--radius-sm); cursor: pointer; text-align: center; font-weight: 700; font-size: 14px; transition: all var(--transition); }
+        .format-btn.active { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+        .format-btn.custom-active { background: var(--purple); color: #fff; box-shadow: 0 0 20px var(--purple-glow); }
+        .format-btn:hover:not(.active):not(.custom-active) { background: rgba(255,255,255,0.04); color: var(--text); }
+        .timer-display { font-size: 72px; font-weight: 900; text-align: center; margin: 24px 0; font-family: 'Outfit', 'Space Grotesk', monospace; letter-spacing: -3px; background: linear-gradient(180deg, var(--text) 0%, var(--text-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .timer-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius-lg); margin-bottom: 16px; border: 1px solid var(--border); transition: all var(--transition); }
+        .timer-card:hover { border-color: var(--border-light); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .timer-card h4 { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        .timer-controls { display: flex; gap: 10px; margin-top: 20px; } .timer-controls button { flex: 1; font-size: 12px; padding: 12px; }
+        .email-status { font-size: 12px; margin-top: -4px; margin-bottom: 8px; } .email-status.valid { color: var(--green); font-weight: 600; } .email-status.invalid { color: var(--orange); font-weight: 600; }
+        .hint-text { font-size: 11px; color: var(--text-muted); margin-top: -4px; margin-bottom: 8px; } .hidden { display: none; }
+        .eval-item { background: var(--bg-card); padding: 20px; border-radius: var(--radius); margin-bottom: 14px; border: 1px solid var(--border); border-left: 3px solid var(--primary); }
+        .eval-item .badge { font-size: 11px; padding: 3px 10px; border-radius: 12px; color: #fff; margin-left: 8px; font-weight: 700; text-transform: uppercase; } .badge-pre { background: #009688; } .badge-re { background: var(--accent); }
+        .card h3 { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin: 12px 0 8px 0; color: var(--text); }
+        .card p { margin: 4px 0; color: var(--text-secondary); font-size: 13px; } .card strong { color: var(--text); font-weight: 600; }
+        .info-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 12px 14px; border-radius: var(--radius-sm); margin: 6px 0; font-size: 13px; color: var(--text-secondary); }
+        .info-box strong { display: inline-block; margin-bottom: 2px; }
+        .card-author { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .card-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: all var(--transition); }
+        .card-avatar:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); transform: scale(1.1); }
+        .card-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .more-detail-link { color: var(--primary); cursor: pointer; font-size: 12px; margin-left: 4px; font-weight: 600; } .more-detail-link:hover { text-decoration: underline; }
+        .redeem-note { margin-top: 20px; font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.6; }
+        .custom-input-row { background: var(--bg-card); padding: 20px; border-radius: var(--radius); margin-bottom: 16px; border: 1px solid var(--border); }
+        .time-input-group { display: flex; gap: 10px; align-items: center; } .time-input-group input { width: 100px; text-align: center; font-weight: 600; } .time-input-group span { font-size: 20px; font-weight: 700; color: var(--text-muted); }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .user-banner-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all var(--transition); display: flex; align-items: center; gap: 12px; }
+        .user-banner-card:hover { border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .journal-entry { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
+                @media (max-width: 768px) {
+            .top { top: 6px; left: 8px; right: 8px; height: 50px; padding: 0 12px; border-radius: var(--radius-lg); }
+            .logo { font-size: 16px; gap: 6px; }
+            .logo-icon { width: 28px; height: 28px; font-size: 14px; border-radius: 8px; }
+            .logo span { display: none; }
+            .nav-btn { padding: 6px 12px; font-size: 11px; border-radius: 20px; }
+            .nav-btn-premium { border-width: 1.5px; font-size: 10px; padding: 5px 10px; }
+            .username { display: none; }
+            .premium-name-badge, .badge-student-judge, .badge-pro-judge, .lv-badge { font-size: 8px; padding: 2px 6px; }
+            .avatar { width: 30px; height: 30px; font-size: 12px; }
+            .avatar-row { padding: 4px 8px; gap: 6px; }
+            #avatarMenu { width: 220px; top: 46px; right: 2px; }
+            #avatarMenu div { padding: 11px 16px; font-size: 12px; }
+            .menu-uid { font-size: 11px !important; padding: 10px 16px !important; }
+            .main { margin-top: 68px; padding: 12px 10px; }
+            .title { flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+            .title h2 { font-size: 22px; }
+            .post-link { font-size: 12px; padding: 8px 14px; }
+            .section-tabs { gap: 4px; margin-bottom: 20px; padding: 4px; }
+            .section-tab { padding: 10px 14px; font-size: 11px; }
+            .grid { grid-template-columns: 1fr; gap: 12px; }
+            .card { padding: 16px; min-height: auto; border-radius: var(--radius); }
+            .card h3 { font-size: 16px; }
+            .card p { font-size: 12px; }
+            .info-box { padding: 10px 12px; font-size: 12px; }
+            button { padding: 10px 18px; font-size: 12px; width: 100%; }
+            .modal-box { width: 92vw; margin: 0 8px; border-radius: var(--radius); }
+            .modal-header { padding: 16px 20px; }
+            .modal-header h3 { font-size: 16px; }
+            .modal-body { padding: 20px; }
+            .form { padding: 20px; }
+            .tabs .tab { padding: 12px; font-size: 12px; }
+            input, select, textarea { padding: 10px 12px; font-size: 13px; margin: 6px 0; }
+            .cv-notification { flex-direction: column; gap: 12px; text-align: center; padding: 14px 18px; }
+            .cv-notification a { width: 100%; text-align: center; }
+            .timer-page h2 { font-size: 24px; }
+            .timer-display { font-size: 42px; }
+            .format-buttons { flex-wrap: wrap; }
+            .format-btn { min-width: 60px; padding: 10px 14px; font-size: 12px; flex: 1 1 40%; }
+            .timer-card { padding: 16px; }
+            .timer-card h4 { font-size: 14px; }
+            .timer-controls { flex-wrap: wrap; }
+            .timer-controls button { flex: 1 1 30%; font-size: 10px; padding: 8px; }
+            .user-banner-card { padding: 10px 12px; }
+            .email-status { font-size: 10px; }
+            .hint-text { font-size: 10px; }
+            .checkbox-row { font-size: 11px; }
+            .time-input-group { flex-wrap: wrap; }
+            .time-input-group input { width: 70px; }
+            .custom-input-row { padding: 14px; }
+            .flash, .flash-success { padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
+            .journal-entry { padding: 12px; }
         }
-        .cv-notification-text {
-            font-size: 14px;
-            color: #333;
-            font-weight: 500;
-        }
-        .cv-notification-badge {
-            background: #f44336;
-            color: white;
-            font-size: 13px;
-            font-weight: bold;
-            padding: 3px 10px;
-            border-radius: 12px;
-            min-width: 24px;
-            text-align: center;
+        @media (max-width: 400px) {
+            .top { height: 44px; padding: 0 8px; border-radius: var(--radius); }
+            .logo { font-size: 14px; gap: 4px; }
+            .logo-icon { width: 24px; height: 24px; font-size: 12px; }
+            .avatar { width: 26px; height: 26px; font-size: 10px; }
+            .nav-btn { padding: 5px 8px; font-size: 10px; }
+            .nav-btn-premium { font-size: 9px; padding: 4px 8px; }
+            #avatarMenu { width: 200px; }
+            .main { margin-top: 60px; padding: 8px 6px; }
+            .title h2 { font-size: 18px; }
+            .section-tab { padding: 8px 10px; font-size: 10px; }
+            .card { padding: 12px; }
+            .card h3 { font-size: 14px; }
+            .modal-box { width: 96vw; }
+            .timer-display { font-size: 32px; }
+            .format-btn { font-size: 10px; padding: 8px 10px; }
+            button { padding: 8px 14px; font-size: 11px; }
         }
     </style>
 </head>
 <body>
 
 <div class="top">
-    <div class="logo">CactuMATCH<span>for debate</span></div>
+    <div class="logo"><div class="logo-icon">C</div>CactuMATCH<span>Oasis 26.1</span></div>
     <div class="user">
         {% if user %}
-        <div style="display:flex; gap:12px; margin-right:16px;">
-            <button class="nav-btn-home" onclick="window.location.href='/'">Home</button>
+        <div style="display:flex; gap:8px; margin-right:16px;">
+            <button class="nav-btn nav-btn-home" onclick="window.location.href='/'">Home</button>
             {% if user.premium %}
-            <button class="nav-btn-premium" onclick="window.location.href='/timer'">Premium Exclusive</button>
+            <button class="nav-btn nav-btn-premium" onclick="window.location.href='/timer'">Premium Exclusive</button>
             {% else %}
-            <button class="nav-btn-premium" onclick="openModal('redeemModal')">Premium Exclusive</button>
+            <button class="nav-btn nav-btn-premium" onclick="openModal('redeemModal')">Premium Exclusive</button>
             {% endif %}
         </div>
         {% endif %}
-
         {% if not user %}
-        <button class="nav-btn-login" onclick="openModal('authModal')">Login / Register</button>
+        <button class="nav-btn nav-btn-login" onclick="openModal('authModal')">Login / Register</button>
         {% else %}
         <div style="position:relative;">
             <div class="avatar-row" onclick="toggleAvatarMenu()">
                 <div class="avatar" style="background: {{user.color}}">
-                    {% if user.avatar %}
-                    <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}">
-                    {% else %}
-                    {{ user.first_name[0] }}{{ user.last_name[0] }}
-                    {% endif %}
+                    {% if user.avatar %}<img src="{{ url_for('static', filename='avatars/' + user.avatar) }}">{% else %}{{ user.first_name[0] }}{{ user.last_name[0] }}{% endif %}
                 </div>
                 <span class="username">{{user.first_name}} {{user.last_name}}</span>
                 {% if user.premium %}<span class="premium-name-badge">PREMIUM</span>{% endif %}
-                {% if user.level %}
-                <span class="lv-badge lv{{ user.level }}">LV{{ user.level }}</span>
-                {% endif %}
+                {% if user.account_type == 'student_judge' %}<span class="badge-student-judge">Student Judge</span>{% endif %}
+                {% if user.account_type == 'professional_judge' %}<span class="badge-pro-judge">Pro Judge</span>{% endif %}
+                {% if user.level %}<span class="lv-badge lv{{ user.level }}">LV{{ user.level }}</span>{% endif %}
             </div>
             <div id="avatarMenu">
+                <div class="menu-uid">UID: {{ user.uid if user else 'N/A' }}</div>
                 <div onclick="openModal('avatarModal')">Change Avatar</div>
-
-                {% if user.email != "ian@cactumatch.com" %}
-                <div onclick="openModal('redeemModal')">Redeem Premium Code</div>
+                {% if user.email != "ian@cactumatch.com" and user.email != "henry@cactumatch.com" %}
+                <div onclick="openModal('redeemModal')" style="color:var(--gold);">Redeem Premium Code</div>
                 {% endif %}
-
                 {% if user.email == "ian@cactumatch.com" %}
-                <div class="gold-admin" onclick="openModal('generateModal')">Generate Code</div>
-                <div class="purple-admin" onclick="openModal('setLevelModal')">Set User Level</div>
-                <div class="red-admin" onclick="openModal('reviewCVModal')">Review CVs {% if pending_count > 0 %}<span style="background:#f44336;color:white;padding:2px 7px;border-radius:10px;font-size:11px;margin-left:4px;">{{ pending_count }}</span>{% endif %}</div>
+                <div onclick="openModal('generateModal')" style="color:var(--gold);">Generate Code</div>
+                <div onclick="openModal('setLevelModal')" style="color:var(--purple);">Set User Level</div>
+                <div onclick="openModal('changeTypeModal')" style="color:var(--orange);">Change Account Type</div>
+                <div onclick="openModal('reviewCVModal')" style="color:var(--red);">Review CVs {% if pending_cv > 0 %}<span style="background:var(--red);color:white;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:4px;">{{ pending_cv }}</span>{% endif %}</div>
+                <div onclick="event.stopPropagation(); document.getElementById('reportsModal').style.display='flex';" style="color:var(--red);">Reports {% if pending_reports > 0 %}<span style="background:var(--red);color:white;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:4px;">{{ pending_reports }}</span>{% endif %}</div>
+                <div class="menu-divider"></div>
+                <div onclick="event.stopPropagation(); openJudgePool();" style="color:var(--blue);">Judge Pool</div>
+                <div onclick="event.stopPropagation(); openMatchJournal();" style="color:var(--gold);">Match Journal</div>
+                <div onclick="event.stopPropagation(); openUserJournal();" style="color:var(--gold);">User Journal</div>
                 {% endif %}
-
-                {% if user.email != "ian@cactumatch.com" %}
+                {% if user.email == "henry@cactumatch.com" %}
+                <div onclick="event.stopPropagation(); document.getElementById('reportsModal').style.display='flex';" style="color:var(--red);">Reports {% if pending_reports > 0 %}<span style="background:var(--red);color:white;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:4px;">{{ pending_reports }}</span>{% endif %}</div>
+                {% endif %}
+                {% if user.email != "ian@cactumatch.com" and user.email != "henry@cactumatch.com" %}
                 <div onclick="openModal('cvModal')">Update CV</div>
                 {% endif %}
-
                 <div class="menu-divider"></div>
                 <div class="logout-item" onclick="window.location.href='/logout'">Log Out</div>
             </div>
@@ -241,558 +317,230 @@
 
 <div class="main">
     {% with messages = get_flashed_messages() %}{% if messages %}
-        {% if 'successfully' in messages[0] or 'Success' in messages[0] or 'Set' in messages[0] %}
+        {% if 'successfully' in messages[0] or 'Success' in messages[0] or 'Set' in messages[0] or 'Changed' in messages[0] %}
         <div class="flash-success">{{ messages[0] }}</div>
         {% else %}
         <div class="flash">{{ messages[0] }}</div>
         {% endif %}
     {% endif %}{% endwith %}
 
-    <!-- CV Review Notification for Ian -->
-    {% if user and user.email == "ian@cactumatch.com" and pending_count > 0 %}
-    <div class="cv-notification">
-        <div class="cv-notification-left">
-            <span class="cv-notification-text">📋 You have unreviewed CVs</span>
-            <span class="cv-notification-badge">{{ pending_count }}</span>
-        </div>
-        <button class="btn-purple" onclick="openModal('reviewCVModal')" style="width:auto; padding:8px 20px;">Go Review</button>
-    </div>
+    {% if user and user.email == "ian@cactumatch.com" and pending_cv > 0 %}
+    <div class="cv-notification"><div class="cv-notification-left"><span class="cv-notification-text">You have unreviewed CVs</span><span class="cv-notification-badge">{{ pending_cv }}</span></div><a href="#" onclick="event.preventDefault(); openModal('reviewCVModal');" style="background:var(--purple); color:white; padding:12px 24px; border-radius:25px; text-decoration:none; font-weight:700; display:inline-block; transition:all 0.2s;">Go Review</a></div>
+    {% endif %}
+    {% if user and user.email == "ian@cactumatch.com" and pending_reports > 0 %}
+    <div class="cv-notification" style="border-left-color:var(--red);"><div class="cv-notification-left"><span class="cv-notification-text">You have pending reports</span><span class="cv-notification-badge" style="background:var(--red);">{{ pending_reports }}</span></div><a href="#" onclick="event.preventDefault(); document.getElementById('reportsModal').style.display='flex';" style="background:var(--red); color:white; padding:12px 24px; border-radius:25px; text-decoration:none; font-weight:700; display:inline-block;">Go Review</a></div>
+    {% endif %}
+    {% if user and user.email == "henry@cactumatch.com" and pending_reports > 0 %}
+    <div class="cv-notification" style="border-left-color:var(--red);"><div class="cv-notification-left"><span class="cv-notification-text">You have pending reports</span><span class="cv-notification-badge" style="background:var(--red);">{{ pending_reports }}</span></div><a href="#" onclick="event.preventDefault(); document.getElementById('reportsModal').style.display='flex';" style="background:var(--red); color:white; padding:12px 24px; border-radius:25px; text-decoration:none; font-weight:700; display:inline-block;">Go Review</a></div>
     {% endif %}
 
     {% if request.path == '/timer' and user %}
     <div class="timer-page">
         <h2>Premium Timer</h2>
-
-        <div class="format-selector">
-            <label>Select Debate Format:</label>
-            <div class="format-buttons">
-                <button class="format-btn active" onclick="setFormat('PF')">PF</button>
-                <button class="format-btn" onclick="setFormat('LD')">LD</button>
-                <button class="format-btn" onclick="setFormat('BP')">BP</button>
-            </div>
-        </div>
-
+        <div class="format-selector"><label>Select Debate Format:</label><div class="format-buttons"><div class="format-btn active" onclick="switchTimerFormat(this, 'PF')">PF</div><div class="format-btn" onclick="switchTimerFormat(this, 'LD')">LD</div><div class="format-btn" onclick="switchTimerFormat(this, 'BP')">BP</div><div class="format-btn" id="customFormatBtn" onclick="switchTimerFormat(this, 'custom')">Custom</div></div></div>
         <div id="timerContainer"></div>
-
-        <div class="custom-timer-section">
-            <div class="custom-timer-header">
-                <h3>Custom Timers</h3>
-                <button class="btn-purple" onclick="addCustomTimerRow()">+ Add Custom Timer</button>
-            </div>
-            <div id="customTimerInputs"></div>
-            <div id="customTimerContainer"></div>
-        </div>
-
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button onclick="window.location.href='/'" style="background:#999;">Back</button>
-        </div>
+        <div id="customTimerSection" style="display:none;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="font-family:'Outfit',sans-serif; font-size:20px; font-weight:700; color:var(--text);">Custom Timers</h3><button class="btn-purple" onclick="addCustomTimerRow()">+ Add Custom Timer</button></div><div id="customTimerInputs"></div><div id="customTimerContainer"></div></div>
+        <div style="display:flex; gap:10px; margin-top:24px;"><button onclick="window.location.href='/'" style="background:#718096;">Back</button></div>
     </div>
     {% else %}
-
-    {% if user and not user.is_judge %}
-    <div class="title">
-        <h2>Post a Match</h2>
-        <span class="post-link" onclick="openModal('postModal')">+ New Match</span>
-    </div>
+    {% if user and user.account_type == 'debater' %}
+    <div class="title"><h2>Post a Match</h2><span class="post-link" onclick="openModal('postModal')">+ New Match</span></div>
     {% endif %}
 
-    <h3>All Matches</h3>
+    <div class="section-tabs"><div class="section-tab active" id="tab-all" onclick="switchSection('all')">All Rounds</div>{% if user %}<div class="section-tab" id="tab-my" onclick="switchSection('my')">My Rounds</div>{% endif %}</div>
+
+    <div id="section-all">
     <div class="grid">
         {% for m in matches %}
-        <div class="card">
-            {% if m.premium %}<div class="premium-badge">PREMIUM</div>{% endif %}
+        <div class="card" style="{% if m.official %}border: 2px solid var(--purple); box-shadow: 0 4px 20px var(--purple-glow);{% endif %}">
+            {% if m.official %}<div class="premium-badge badge-official">OFFICIAL</div>{% elif m.premium %}<div class="premium-badge badge-premium">PREMIUM</div>{% endif %}
+            {% if m.judge_type_restriction and m.judge_type_restriction not in ['any', '', None] %}<div style="font-size:10px; color:var(--text-muted); margin-bottom:4px;">Judge: {{ 'Student Judge' if m.judge_type_restriction == 'student_judge' else 'Professional Judge' }} only</div>{% endif %}
+            <div class="card-author">
+                <div class="card-avatar" style="background:{% for u in db.users %}{% if u.email == m.author %}{{ u.color }}{% endif %}{% endfor %};" onclick="showUserInfo('{{ m.author }}', event)" title="Click to view profile">
+                    {% for u in db.users %}{% if u.email == m.author %}{% if u.avatar %}<img src="{{ url_for('static', filename='avatars/' + u.avatar) }}">{% else %}{{ u.first_name[0] }}{{ u.last_name[0] }}{% endif %}{% endif %}{% endfor %}
+                </div>
+                <span style="font-size:13px; color: var(--text-secondary); font-weight: 500;">{% if m.author == "ian@cactumatch.com" %}Posted by Platform{% else %}{{ m.author_name }}{% endif %}</span>
+            </div>
             <h3>{{ m.type }}</h3>
-            <p style="margin:6px 0; color:#555;">{{ m.time }}</p>
-            <p><strong>Judge:</strong> {{ m.judge }}</p>
+            <p style="margin:6px 0; color: var(--text-secondary);">{{ m.time }}</p>
             <p><strong>Platform:</strong> {{ m.platform }}</p>
             <p><strong>ID:</strong> {{ m.meeting_id }}</p>
             <p><strong>Password:</strong> {{ m.meeting_pwd }}</p>
-            {% for t in m.teams %}<p style="margin-top:8px;"><strong>Team:</strong> {{ t }}</p>{% endfor %}
-            {% if user and user.email in ["ian@cactumatch.com", "roundmanager@cactumatch.com"] %}
-            <div style="display:flex; gap:8px; margin-top:14px;">
-                <button style="flex:1;" onclick="openJoinModal({{ loop.index0 }})">Join</button>
-                <button class="btn-red" style="width:100px;" onclick="if(confirm('Delete?')) window.location.href='/delete/{{ loop.index0 }}'">Delete</button>
-            </div>
-            {% else %}
-            <button style="width:100%; margin-top:14px;" onclick="openJoinModal({{ loop.index0 }})">Join</button>
+            <div class="info-box"><strong>Team 1:</strong> {% if m.teams|length > 0 %}{{ m.teams[0] }}{% else %}<span style="color: var(--text-muted);">(Waiting...)</span>{% endif %}</div>
+            <div class="info-box"><strong>Team 2:</strong> {% if m.teams|length > 1 %}{{ m.teams[1] }}{% else %}<span style="color: var(--text-muted);">(Waiting...)</span>{% endif %}</div>
+            <div class="info-box"><strong>Judge:</strong> {% if m.judge and m.judge != "Not specified" %}{{ m.judge }}{% else %}<span style="color: var(--text-muted);">(Waiting...)</span>{% endif %}</div>
+            <div class="info-box" style="min-height: 44px;"><strong>Note:</strong>{% if m.note %}<span style="font-size:13px; color: var(--text-secondary);">{{ m.note[:20] }}{% if m.note|length > 20 %}...{% endif %}</span>{% if m.note|length > 20 or m.official %}<span onclick="openDetailModal('{{ m.rid }}')" class="more-detail-link">More Detail</span>{% endif %}{% else %}<span style="color: var(--text-muted); font-size:13px;">None</span>{% endif %}</div>
+            {% if user and user.account_type in ['student_judge', 'professional_judge'] %}
+            <form method="post" action="/join/{{ loop.index0 }}" style="margin-top:auto; padding-top:14px;"><button type="submit" style="width:100%; background:var(--orange);">Join as Judge</button></form>
+            {% elif user and user.email in ["ian@cactumatch.com", "roundmanager@cactumatch.com"] %}
+            <div style="display:flex; gap:8px; margin-top:auto; padding-top:14px;"><button style="flex:1;" onclick="openJoinModal({{ loop.index0 }})">Join</button><button class="btn-red" style="width:100px;" onclick="if(confirm('Delete?')) window.location.href='/delete/{{ loop.index0 }}'">Delete</button></div>
+            {% elif user and user.account_type == 'debater' %}
+            <button style="width:100%; margin-top:auto;" onclick="openJoinModal({{ loop.index0 }})">Join</button>
             {% endif %}
         </div>
         {% endfor %}
     </div>
+</div>
+    {% if user %}
+    <div id="section-my" style="display:none;">
+    <div class="grid">
+        {% for item in my_matches %}
+        <div class="card" style="{% if item.match.official %}border: 2px solid var(--purple); box-shadow: 0 4px 20px var(--purple-glow);{% endif %}">
+            {% if item.match.official %}<div class="premium-badge badge-official">OFFICIAL</div>{% elif item.match.premium %}<div class="premium-badge badge-premium">PREMIUM</div>{% endif %}
+            {% if item.match.judge_type_restriction and item.match.judge_type_restriction not in ['any', '', None] %}<div style="font-size:10px; color:var(--text-muted); margin-bottom:4px;">Judge: {{ 'Student Judge' if item.match.judge_type_restriction == 'student_judge' else 'Professional Judge' }} only</div>{% endif %}
+            <div class="card-author">
+                <div class="card-avatar" style="background:{% for u in db.users %}{% if u.email == item.match.author %}{{ u.color }}{% endif %}{% endfor %};" onclick="showUserInfo('{{ item.match.author }}', event)" title="Click to view profile">
+                    {% for u in db.users %}{% if u.email == item.match.author %}{% if u.avatar %}<img src="{{ url_for('static', filename='avatars/' + u.avatar) }}">{% else %}{{ u.first_name[0] }}{{ u.last_name[0] }}{% endif %}{% endif %}{% endfor %}
+                </div>
+                <span style="font-size:13px; color: var(--text-secondary); font-weight: 500;">{% if item.match.author == "ian@cactumatch.com" %}Posted by Platform{% else %}{{ item.match.author_name }}{% endif %}</span>
+            </div>
+            <h3>{{ item.match.type }}</h3>
+            <p style="margin:6px 0; color: var(--text-secondary);">{{ item.match.time }}</p>
+            <p><strong>Platform:</strong> {{ item.match.platform }}</p>
+            <p><strong>ID:</strong> {{ item.match.meeting_id }}</p>
+            <p><strong>Password:</strong> {{ item.match.meeting_pwd }}</p>
+            <div class="info-box"><strong>Team 1:</strong> {% if item.match.teams|length > 0 %}{{ item.match.teams[0] }}{% else %}<span style="color: var(--text-muted);">(Waiting...)</span>{% endif %}</div>
+            <div class="info-box"><strong>Team 2:</strong> {% if item.match.teams|length > 1 %}{{ item.match.teams[1] }}{% else %}<span style="color: var(--text-muted);">(Waiting...)</span>{% endif %}</div>
+            <div class="info-box"><strong>Judge:</strong> {% if item.match.judge and item.match.judge != "Not specified" %}{{ item.match.judge }}{% else %}<span style="color: var(--text-muted);">(Waiting...)</span>{% endif %}</div>
+            <div class="info-box" style="min-height: 44px;"><strong>Note:</strong>{% if item.match.note %}<span style="font-size:13px; color: var(--text-secondary);">{{ item.match.note[:20] }}{% if item.match.note|length > 20 %}...{% endif %}</span>{% if item.match.note|length > 20 or item.match.official %}<span onclick="openDetailModal('{{ item.match.rid }}')" class="more-detail-link">More Detail</span>{% endif %}{% else %}<span style="color: var(--text-muted); font-size:13px;">None</span>{% endif %}</div>
+            <button class="btn-red" style="width:100%; margin-top:auto; padding-top:10px;" onclick="openReportModal('{{ item.match.rid }}')">Report Round</button>
+        </div>
+        {% endfor %}
+        {% if my_matches|length == 0 %}<div class="empty-state">You haven't joined any rounds yet.</div>{% endif %}
+    </div>
+    </div>
     {% endif %}
-</div>
 
-<!-- Join Modal -->
-<div class="modal" id="joinModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Join Match</h3><span class="close" onclick="closeModal('joinModal')">×</span></div>
-        <div class="modal-body">
-            <form id="joinForm" method="post">
-                <input type="email" name="teammate_email" id="join_teammate_email" placeholder="Teammate Email" oninput="checkTeammateEmail('join')">
-                <div id="join_email_status" class="email-status"></div>
-                <div class="checkbox-row">
-                    <input type="checkbox" name="no_account" id="join_no_account" onchange="toggleTeammateName('join')">
-                    <label for="join_no_account">My teammate does not have an account</label>
-                </div>
-                <input type="text" name="teammate_name" id="join_teammate_name" placeholder="Teammate Name" class="hidden">
-                <button style="width:100%; margin-top:10px;">Join</button>
-            </form>
-        </div>
+    <!-- Join Modal -->
+    <div class="modal" id="joinModal"><div class="modal-box"><div class="modal-header"><h3>Join Match</h3><span class="close" onclick="closeModal('joinModal')">&times;</span></div><div class="modal-body"><form id="joinForm" method="post"><input type="email" name="teammate_email" id="join_teammate_email" placeholder="Teammate Email" oninput="checkTeammateEmail('join')"><div id="join_email_status" class="email-status"></div><div class="checkbox-row"><input type="checkbox" name="no_account" id="join_no_account" onchange="toggleTeammateName('join')"><label for="join_no_account">My teammate does not have an account</label></div><input type="text" name="teammate_name" id="join_teammate_name" placeholder="Teammate Name" class="hidden"><button style="width:100%; margin-top:12px;">Join</button></form></div></div></div>
+
+    <!-- Report Modal -->
+    <div class="modal" id="reportModal"><div class="modal-box"><div class="modal-header"><h3>Report Round</h3><span class="close" onclick="closeModal('reportModal')">&times;</span></div><div class="modal-body"><form id="reportForm" method="post"><select name="reason" id="reportReason" onchange="toggleReportDetails()" required><option value="">Select reason...</option><option value="Invalid Meeting ID">Invalid Meeting ID</option><option value="Invalid Password">Invalid Password</option><option value="Opponent Not There">Opponent Not There</option><option value="Judge Not There">Judge Not There</option><option value="Other">Other</option></select><textarea name="details" id="reportDetails" placeholder="Please provide details..." class="hidden" style="margin-top:10px;" rows="3"></textarea><button class="btn-red" style="width:100%; margin-top:12px;">Submit Report</button></form></div></div></div>
+
+    <!-- Match Detail Modal -->
+    <div class="modal" id="detailModal"><div class="modal-box" style="width:600px;"><div class="modal-header"><h3 id="detailTitle">Match Detail</h3><span class="close" onclick="closeModal('detailModal')">&times;</span></div><div class="modal-body" id="detailBody"></div></div></div>
+
+    <!-- Reports Modal -->
+    <div class="modal" id="reportsModal" style="z-index:99999;"><div class="modal-box" style="width:680px; max-width:95vw;"><div class="modal-header"><h3>Reports</h3><span class="close" onclick="closeModal('reportsModal')">&times;</span></div><div class="modal-body" style="max-height:70vh; overflow-y:auto;">
+    {% for r in reports %}{% if r.status != "resolved" and r.status != "dismissed" %}
+    <div style="background: var(--bg-card); padding:18px; border-radius: var(--radius); margin-bottom:18px; border:1px solid var(--border);">
+        <p><strong>Report {{ r.id }}</strong> | Status: <span style="color:var(--orange); font-weight:600;">{{ r.status }}</span></p>
+        <p style="font-size:13px; color: var(--text-muted);">{{ r.time }}</p>
+        <p><strong>RID:</strong> {{ r.rid }}</p><p><strong>Reporter:</strong> {{ r.reporter }}</p><p><strong>Reason:</strong> {{ r.reason }}</p>
+        {% if r.details %}<p><strong>Details:</strong> {{ r.details }}</p>{% endif %}
+        <div style="background: var(--bg-input); padding:12px; border-radius: var(--radius-sm); margin:10px 0;">{% for m in db.matches %}{% if m.rid == r.rid %}<p><strong>Match:</strong> {{ m.type }} | {{ m.time }}</p><p><strong>Author:</strong> {{ m.author }}</p><p><strong>Judge:</strong> {{ m.judge }}</p>{% endif %}{% endfor %}</div>
+        {% if user.email == "ian@cactumatch.com" %}
+        <div style="background:rgba(255,71,87,0.08); padding:14px; border-radius: var(--radius-sm); margin-top:10px;"><p style="font-weight:700; margin-bottom:10px;">Ian's Action:</p><form method="post" action="/ian-review/{{ r.id }}"><input type="hidden" name="punished_email" value="{{ r.reporter }}"><select name="punishment" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid var(--border); border-radius: var(--radius-sm); background:var(--bg-input); color:var(--text);"><option value="">-- Select Punishment --</option><option value="suspend 7 days">Suspend 7 days</option><option value="suspend 2 weeks">Suspend 2 weeks</option><option value="suspend a month">Suspend a month</option><option value="suspend a year">Suspend a year</option></select><div style="display:flex; gap:10px;"><button type="submit" name="action" value="punish" class="btn-red" style="flex:1;">Punish</button><button type="submit" name="action" value="dismiss" class="btn-green" style="flex:1;">Dismiss</button></div></form></div>
+        {% endif %}
+        {% if user.email == "henry@cactumatch.com" %}
+        <div style="background:rgba(255,159,67,0.08); padding:14px; border-radius: var(--radius-sm); margin-top:10px;"><p style="font-weight:700; margin-bottom:10px;">Henry's Action:</p><form method="post" action="/henry-review/{{ r.id }}"><select name="punish_who" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid var(--border); border-radius: var(--radius-sm); background:var(--bg-input); color:var(--text);"><option value="">-- Who to punish --</option><option value="reporter">The Reporter</option><option value="creator">Match Creator</option><option value="judge">Judge</option></select><select name="punishment" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid var(--border); border-radius: var(--radius-sm); background:var(--bg-input); color:var(--text);"><option value="">-- Select Punishment --</option><option value="suspend 7 days">Suspend 7 days (Direct)</option><option value="suspend 2 weeks">Suspend 2 weeks (Direct)</option><option value="suspend a month">Suspend a month (Needs Ian)</option><option value="suspend a year">Suspend a year (Needs Ian)</option></select><div style="display:flex; gap:10px;"><button type="submit" name="action" value="punish" class="btn-red" style="flex:1;">Punish</button><button type="submit" name="action" value="pass" class="btn-green" style="flex:1;">Pass</button></div></form></div>
+        {% endif %}
     </div>
-</div>
+    {% endif %}{% endfor %}
+    {% if reports|length == 0 %}<div class="empty-state">No pending reports</div>{% endif %}
+    </div></div></div>
 
-<!-- Login Modal -->
-<div class="modal" id="authModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Account</h3><span class="close" onclick="closeModal('authModal')">×</span></div>
-        <div class="tabs"><div class="tab active" onclick="switchTab('login')">Login</div><div class="tab" onclick="switchTab('register')">Register</div></div>
-        <div class="form active" id="login-form">
-            {% if request.args.get('registered') == 'success' %}
-            <div style="background:#4CAF50; color:white; padding:12px; border-radius:8px; margin-bottom:16px; text-align:center; font-weight:500;">
-                ✓ You successfully created an account, please log in
-            </div>
-            {% endif %}
-            <form method="post" action="/login">
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button style="width:100%; margin-top:10px;">Login</button>
-            </form>
-        </div>
-        <div class="form" id="register-form">
-            <form method="post" action="/register" onsubmit="return checkCV()">
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="text" name="first_name" placeholder="First Name" required>
-                <input type="text" name="last_name" placeholder="Last Name" required>
-                <div class="checkbox-row"><input type="checkbox" name="is_judge" id="is_judge"><label for="is_judge">Sign up as judge</label></div>
-                <textarea id="cv-input" name="cv" rows="4" placeholder="Your CV" required></textarea>
-                <button style="width:100%; margin-top:12px;">Register</button>
-            </form>
-        </div>
-    </div>
-</div>
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal"><div class="modal-box"><div class="modal-header"><h3>Account</h3><span class="close" onclick="closeModal('authModal')">&times;</span></div><div class="tabs"><div class="tab active" onclick="switchTab('login')">Login</div><div class="tab" onclick="switchTab('register')">Register</div></div><div class="form active" id="login-form">{% if request.args.get('registered') == 'success' %}<div style="background:rgba(46,213,115,0.1); color:#5dffa0; padding:14px; border-radius: var(--radius-sm); margin-bottom:18px; text-align:center; font-weight:600;">You successfully created an account, please log in</div>{% endif %}<form method="post" action="/login"><input type="email" name="email" placeholder="Email" required><input type="password" name="password" placeholder="Password" required><button style="width:100%; margin-top:14px;">Login</button></form></div><div class="form" id="register-form"><form method="post" action="/register" onsubmit="return checkCV()"><input type="email" name="email" placeholder="Email" required><input type="password" name="password" placeholder="Password" required><input type="text" name="first_name" placeholder="First Name" required><input type="text" name="last_name" placeholder="Last Name" required><select name="account_type" required style="margin:8px 0;"><option value="debater">Debater</option><option value="student_judge">Student Judge</option><option value="professional_judge">Professional Judge</option></select><textarea id="cv-input" name="cv" rows="4" placeholder="Your CV" required></textarea><button style="width:100%; margin-top:14px;">Register</button></form></div></div></div>
 
-<!-- Post Modal -->
-<div class="modal" id="postModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Post Match</h3><span class="close" onclick="closeModal('postModal')">×</span></div>
-        <div class="modal-body">
-            <form method="post" action="/post">
-                <select name="type"><option>LD</option><option>PF</option><option>BP</option></select>
-                <input type="datetime-local" name="time" required>
-                <input type="text" name="platform" placeholder="Platform" required>
-                <input type="text" name="judge" placeholder="Judge">
-                <div class="hint-text">Fill in if you already found one</div>
-                <input type="text" name="meeting_id" placeholder="Meeting ID" required>
-                <input type="text" name="meeting_pwd" placeholder="Meeting Password" required>
+    <!-- Post Modal -->
+    <div class="modal" id="postModal"><div class="modal-box"><div class="modal-header"><h3>Post Match</h3><span class="close" onclick="closeModal('postModal')">&times;</span></div><div class="modal-body"><form method="post" action="/post"><select name="type" onchange="toggleTeammateByType()"><option>LD</option><option>PF</option><option>BP</option></select><input type="datetime-local" name="time" required><input type="text" name="platform" placeholder="Platform" required><input type="text" name="judge" placeholder="Judge"><div class="hint-text">Fill in if you already found one</div><input type="text" name="meeting_id" placeholder="Meeting ID" required><input type="text" name="meeting_pwd" placeholder="Meeting Password" required>{% if user and user.email == "ian@cactumatch.com" %}<input type="text" name="note" placeholder="Official Note (no character limit)">{% else %}<input type="text" name="note" placeholder="Note (max 120 chars)" maxlength="120">{% endif %}{% if user and user.premium %}<select name="judge_type_restriction" style="margin:8px 0;"><option value="any">Any Judge</option><option value="student_judge">Student Judge Only</option><option value="professional_judge">Professional Judge Only</option></select>{% endif %}{% if user and user.email == "ian@cactumatch.com" %}<div class="checkbox-row"><input type="checkbox" name="official" id="official"><label for="official">Mark as Official Tournament</label></div>{% endif %}{% if user and user.premium %}<div class="checkbox-row"><input type="checkbox" name="level_restrict" id="lr"><label for="lr">Level Restrict</label></div>{% endif %}{% if user.email != "ian@cactumatch.com" %}<input type="email" name="teammate_email" id="post_teammate_email" placeholder="Teammate Email" oninput="checkTeammateEmail('post')"><div id="post_email_status" class="email-status"></div><div class="checkbox-row"><input type="checkbox" name="no_account" id="post_no_account" onchange="toggleTeammateName('post')"><label for="post_no_account">My teammate does not have an account</label></div><input type="text" name="teammate_name" id="post_teammate_name" placeholder="Teammate Name" class="hidden">{% endif %}<button style="width:100%; margin-top:14px;">Post</button></form></div></div></div>
 
-                <input type="email" name="teammate_email" id="post_teammate_email" placeholder="Teammate Email" oninput="checkTeammateEmail('post')">
-                <div id="post_email_status" class="email-status"></div>
-                <div class="checkbox-row">
-                    <input type="checkbox" name="no_account" id="post_no_account" onchange="toggleTeammateName('post')">
-                    <label for="post_no_account">My teammate does not have an account</label>
-                </div>
-                <input type="text" name="teammate_name" id="post_teammate_name" placeholder="Teammate Name" class="hidden">
+    {% if user and user.email != "ian@cactumatch.com" and user.email != "henry@cactumatch.com" %}
+    <div class="modal" id="cvModal"><div class="modal-box"><div class="modal-header"><h3>Update CV</h3><span class="close" onclick="closeModal('cvModal')">&times;</span></div><div class="modal-body"><form method="post" action="/update-cv"><textarea name="new_cv" rows="6" placeholder="Your new CV" required></textarea><button style="width:100%; margin-top:14px;">Submit</button></form></div></div></div>
+    {% endif %}
 
-                {% if user and user.premium %}
-                <div class="checkbox-row"><input type="checkbox" name="level_restrict" id="lr"><label for="lr">Level Restrict</label></div>
-                {% endif %}
-                <button style="width:100%; margin-top:10px;">Post</button>
-            </form>
-        </div>
-    </div>
-</div>
+    <div class="modal" id="avatarModal"><div class="modal-box"><div class="modal-header"><h3>Change Avatar</h3><span class="close" onclick="closeModal('avatarModal')">&times;</span></div><div class="modal-body"><form method="post" action="/upload_avatar" enctype="multipart/form-data"><input type="file" name="avatar" accept="image/*" required><button style="width:100%; margin-top:14px;">Upload</button></form></div></div></div>
 
-{% if user and user.email != "ian@cactumatch.com" %}
-<!-- CV Modal -->
-<div class="modal" id="cvModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Update CV</h3><span class="close" onclick="closeModal('cvModal')">×</span></div>
-        <div class="modal-body">
-            <form method="post" action="/update-cv">
-                <textarea name="new_cv" rows="6" placeholder="Your new CV" required></textarea>
-                <button style="width:100%; margin-top:10px;">Submit</button>
-            </form>
-        </div>
-    </div>
-</div>
-{% endif %}
+    {% if user and user.email == "ian@cactumatch.com" %}
+    <div class="modal" id="generateModal"><div class="modal-box"><div class="modal-header"><h3>Generate Premium Code</h3><span class="close" onclick="closeModal('generateModal')">&times;</span></div><div class="modal-body"><form method="post" action="/generate-code"><select name="duration"><option value="7D">7 Days</option><option value="1M" selected>1 Month</option><option value="3M">3 Months</option><option value="1Y">1 Year</option><option value="2Y">2 Years</option></select><button style="width:100%; margin-top:14px;">Generate</button></form></div></div></div>
 
-<!-- Avatar Modal -->
-<div class="modal" id="avatarModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Change Avatar</h3><span class="close" onclick="closeModal('avatarModal')">×</span></div>
-        <div class="modal-body">
-            <form method="post" action="/upload_avatar" enctype="multipart/form-data">
-                <input type="file" name="avatar" accept="image/*" required>
-                <button style="width:100%; margin-top:10px;">Upload</button>
-            </form>
-        </div>
-    </div>
-</div>
+    <div class="modal" id="setLevelModal"><div class="modal-box"><div class="modal-header"><h3>Set User Level</h3><span class="close" onclick="closeModal('setLevelModal')">&times;</span></div><div class="modal-body"><form method="post" action="/set-level"><input class="admin-input" type="email" name="email" placeholder="Enter user email" required><select class="admin-input" name="level" required><option value="1">LV1</option><option value="2">LV2</option><option value="3">LV3</option><option value="4">LV4</option><option value="5">LV5</option><option value="6">LV6</option></select><button style="width:100%; margin-top:14px;">Set Level</button></form></div></div></div>
 
-{% if user and user.email == "ian@cactumatch.com" %}
-<!-- Generate Code Modal -->
-<div class="modal" id="generateModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Generate Premium Code</h3><span class="close" onclick="closeModal('generateModal')">×</span></div>
-        <div class="modal-body">
-            <form method="post" action="/generate-code">
-                <select name="duration">
-                    <option value="7D">7 Days</option>
-                    <option value="1M" selected>1 Month</option>
-                    <option value="3M">3 Months</option>
-                    <option value="1Y">1 Year</option>
-                    <option value="2Y">2 Years</option>
-                </select>
-                <button style="width:100%; margin-top:10px;">Generate</button>
-            </form>
-        </div>
-    </div>
-</div>
+    <div class="modal" id="changeTypeModal"><div class="modal-box"><div class="modal-header"><h3>Change Account Type</h3><span class="close" onclick="closeModal('changeTypeModal')">&times;</span></div><div class="modal-body"><form method="post" action="/change-account-type"><input class="admin-input" type="email" name="email" placeholder="Enter user email" required><select class="admin-input" name="account_type" required><option value="debater">Debater</option><option value="student_judge">Student Judge</option><option value="professional_judge">Professional Judge</option></select><button style="width:100%; margin-top:14px;">Change Type</button></form></div></div></div>
 
-<!-- Set Level Modal -->
-<div class="modal" id="setLevelModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Force Set User Level</h3><span class="close" onclick="closeModal('setLevelModal')">×</span></div>
-        <div class="modal-body">
-            <form method="post" action="/set-level">
-                <input class="admin-input" type="email" name="email" placeholder="Enter user email" required>
-                <select class="admin-input" name="level" required>
-                    <option value="1">LV1</option>
-                    <option value="2">LV2</option>
-                    <option value="3">LV3</option>
-                    <option value="4">LV4</option>
-                    <option value="5">LV5</option>
-                    <option value="6">LV6</option>
-                </select>
-                <button style="width:100%; margin-top:10px;">Set Level</button>
-            </form>
-        </div>
-    </div>
-</div>
+    <div class="modal" id="reviewCVModal"><div class="modal-box" style="width:640px;"><div class="modal-header"><h3>Review CVs</h3><span class="close" onclick="closeModal('reviewCVModal')">&times;</span></div><div class="modal-body">{% if evals|length == 0 %}<div class="empty-state">No pending CV reviews</div>{% else %}{% for e in evals %}<div class="eval-item"><strong>{{e.name}}</strong> ({{e.email}})<span class="badge badge-{{'re' if e.type=='re' else 'pre'}}">{{'Re-Eval' if e.type=='re' else 'Pre-Eval'}}</span><p style="font-size:12px; color: var(--text-muted);">{{e.time}}</p><p style="margin:8px 0;">{{e.cv}}</p><form method="post" action="/set-level" style="display:flex; gap:8px;"><input type="hidden" name="email" value="{{e.email}}"><select name="level" required style="flex:1;"><option value="1">LV1</option><option value="2">LV2</option><option value="3">LV3</option><option value="4">LV4</option><option value="5">LV5</option><option value="6">LV6</option></select><button>Set</button></form></div>{% endfor %}{% endif %}</div></div></div>
+    {% endif %}
 
-<!-- Review CV Modal -->
-<div class="modal" id="reviewCVModal">
-    <div class="modal-box" style="width:600px;">
-        <div class="modal-header"><h3>Review CVs</h3><span class="close" onclick="closeModal('reviewCVModal')">×</span></div>
-        <div class="modal-body">
-            {% if evals|length == 0 %}
-            <p style="text-align:center; color:#999;">No pending CV reviews 🎉</p>
-            {% else %}
-            {% for e in evals %}
-            <div class="eval-item">
-                <strong>{{e.name}}</strong> ({{e.email}})
-                <span class="badge badge-{{'re' if e.type=='re' else 'pre'}}">{{'Re-Eval' if e.type=='re' else 'Pre-Eval'}}</span>
-                <p style="font-size:12px; color:#666;">{{e.time}}</p>
-                <p style="margin:6px 0;">{{e.cv}}</p>
-                <form method="post" action="/set-level" style="display:flex; gap:8px;">
-                    <input type="hidden" name="email" value="{{e.email}}">
-                    <select name="level" required style="flex:1;">
-                        <option value="1">LV1</option><option value="2">LV2</option><option value="3">LV3</option><option value="4">LV4</option><option value="5">LV5</option><option value="6">LV6</option>
-                    </select>
-                    <button>Set</button>
-                </form>
-            </div>
-            {% endfor %}
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{% if user and user.email != "ian@cactumatch.com" %}
-<!-- Redeem Modal -->
-<div class="modal" id="redeemModal">
-    <div class="modal-box">
-        <div class="modal-header"><h3>Redeem Premium</h3><span class="close" onclick="closeModal('redeemModal')">×</span></div>
-        <div class="modal-body">
-            <form method="post" action="/redeem-code">
-                <input type="text" name="code" placeholder="Enter your premium code" required>
-                <button style="width:100%; margin-top:10px;">Redeem</button>
-            </form>
-            <p class="redeem-note">
-                Thank you for supporting, but Premium is not open for purchase yet!<br>
-                There will be multiple chances to get Premium, be patient!
-            </p>
-            {% if redeem_confirm_code %}
-            <br>
-            <form method="post" action="/redeem-code">
-                <input type="hidden" name="code" value="{{ redeem_confirm_code }}">
-                <input type="hidden" name="force" value="1">
-                <button class="btn-red" style="width:100%;">Confirm Replace</button>
-            </form>
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<script>
+    <div class="modal" id="redeemModal"><div class="modal-box"><div class="modal-header"><h3>Redeem Premium</h3><span class="close" onclick="closeModal('redeemModal')">&times;</span></div><div class="modal-body"><form method="post" action="/redeem-code"><input type="text" name="code" placeholder="Enter your premium code" required><button style="width:100%; margin-top:14px; background: linear-gradient(135deg, var(--gold), #ffb700); color: #000;">Redeem</button></form><p class="redeem-note">Thank you for supporting, but Premium is not open for purchase yet!<br>There will be multiple chances to get Premium, be patient!</p>{% if redeem_confirm_code %}<br><form method="post" action="/redeem-code"><input type="hidden" name="code" value="{{ redeem_confirm_code }}"><input type="hidden" name="force" value="1"><button class="btn-red" style="width:100%;">Confirm Replace</button></form>{% endif %}</div></div></div>
+    {% endif %}
+    <script>
     let menuOpen = false;
     let currentMatchIndex = 0;
     let currentFormat = 'PF';
     let timers = {};
     let customTimers = {};
     let customTimerCounter = 0;
+    let userInfoPopup = null;
 
     const timerConfigs = {
-        'PF': [
-            {name: 'Constructive Speech(Pro/Con)', time: 240},
-            {name: 'Constructive Speech(Pro/con)', time: 240},
-            {name: 'Crossfire 1', time: 180},
-            {name: 'Rebuttal Speech(Pro/Con)', time: 240},
-            {name: 'Rebuttal Speech(Pro/Con)', time: 240},
-            {name: 'Summary(Pro/Con)', time: 180},
-            {name: 'Summary(Pro/Con)', time: 180},
-            {name: 'Grand Crossfire', time: 180},
-            {name: 'Final Focus(Pro/Con)', time: 120},
-            {name: 'Final Focus(Pro/Con)', time: 120}
-        ],
-        'LD': [
-            {name: 'Affirmative Constructive', time: 360},
-            {name: 'Cross-Examination(AFF)', time: 180},
-            {name: 'Negative Constructive', time: 420},
-            {name: 'Cross-Examination(NEG)', time: 180},
-            {name: '1st Affirmative Rebuttal', time: 240},
-            {name: 'Negative Rebuttal', time: 360},
-            {name: '2nd Affirmative Rebuttal', time: 180}
-        ],
-        'BP': [
-            {name: 'Prime Minister', time: 420},
-            {name: 'Leader of Opposition', time: 420},
-            {name: 'Deputy Prime Minister', time: 420},
-            {name: 'Deputy Leader of Opposition', time: 420},
-            {name: 'Member of Government', time: 420},
-            {name: 'Member of Opposition', time: 420},
-            {name: 'Government Whip', time: 420},
-            {name: 'Opposition Whip', time: 420}
-        ]
+        'PF': [{name:'Constructive Speech(Pro/Con)',time:240},{name:'Constructive Speech(Pro/con)',time:240},{name:'Crossfire 1',time:180},{name:'Rebuttal Speech(Pro/Con)',time:240},{name:'Rebuttal Speech(Pro/Con)',time:240},{name:'Summary(Pro/Con)',time:180},{name:'Summary(Pro/Con)',time:180},{name:'Grand Crossfire',time:180},{name:'Final Focus(Pro/Con)',time:120},{name:'Final Focus(Pro/Con)',time:120}],
+        'LD': [{name:'Affirmative Constructive',time:360},{name:'Cross-Examination(AFF)',time:180},{name:'Negative Constructive',time:420},{name:'Cross-Examination(NEG)',time:180},{name:'1st Affirmative Rebuttal',time:240},{name:'Negative Rebuttal',time:360},{name:'2nd Affirmative Rebuttal',time:180}],
+        'BP': [{name:'Prime Minister',time:420},{name:'Leader of Opposition',time:420},{name:'Deputy Prime Minister',time:420},{name:'Deputy Leader of Opposition',time:420},{name:'Member of Government',time:420},{name:'Member of Opposition',time:420},{name:'Government Whip',time:420},{name:'Opposition Whip',time:420}],
+        'custom': []
     };
 
-    function toggleAvatarMenu() {
-        const m=document.getElementById("avatarMenu");
-        menuOpen=!menuOpen;
-        m.style.display=menuOpen?"block":"none";
-    }
+    function toggleAvatarMenu(){const m=document.getElementById("avatarMenu");menuOpen=!menuOpen;m.style.display=menuOpen?"block":"none";}
+    function openModal(id){document.getElementById(id).style.display="flex";if(id==='postModal')toggleTeammateByType();if(id==='joinModal'){var card=document.querySelectorAll('.card')[currentMatchIndex];if(card){var typeEl=card.querySelector('h3');if(typeEl&&typeEl.textContent.trim()==='LD'){document.getElementById('join_teammate_email').style.display='none';document.getElementById('join_email_status').style.display='none';document.getElementById('join_no_account').parentElement.style.display='none';document.getElementById('join_teammate_name').style.display='none';}else{document.getElementById('join_teammate_email').style.display='block';document.getElementById('join_email_status').style.display='block';document.getElementById('join_no_account').parentElement.style.display='flex';}}}}
+    function closeModal(id){document.getElementById(id).style.display="none";}
+    function switchTab(tab){document.querySelectorAll("#authModal .tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll("#authModal .form").forEach(f=>f.classList.remove("active"));event.target.classList.add("active");document.getElementById(tab+"-form").classList.add("active");}
+    function switchSection(section){document.getElementById('section-all').style.display=section==='all'?'block':'none';document.getElementById('section-my').style.display=section==='my'?'block':'none';document.getElementById('tab-all').classList.toggle('active',section==='all');document.getElementById('tab-my').classList.toggle('active',section==='my');}
+    function checkCV(){const cv=document.getElementById("cv-input").value;if(!cv){alert("Please enter CV");return false;}return true;}
 
-    function openModal(id) {
-        document.getElementById(id).style.display="flex";
-        if (id === 'timer') { initTimer(); }
-    }
-
-    function closeModal(id) {
-        document.getElementById(id).style.display="none";
-    }
-
-    function switchTab(tab) {
-        document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-        document.querySelectorAll(".form").forEach(f=>f.classList.remove("active"));
-        event.target.classList.add("active");
-        document.getElementById(tab+"-form").classList.add("active");
-    }
-
-    function checkCV() {
-        const cv=document.getElementById("cv-input").value;
-        if(!cv){ alert("Please enter CV"); return false; }
-        return true;
-    }
-
-    function openJoinModal(index) {
-        currentMatchIndex = index;
-        document.getElementById("joinForm").action = "/join/" + index;
-        document.getElementById("join_teammate_email").value = "";
-        document.getElementById("join_teammate_name").value = "";
-        document.getElementById("join_no_account").checked = false;
-        document.getElementById("join_teammate_name").classList.add("hidden");
-        document.getElementById("join_email_status").textContent = "";
+    function openJoinModal(index){
+        {% if user and user.account_type in ['student_judge', 'professional_judge'] %}
+        document.getElementById("joinForm").action="/join/"+index;document.getElementById("joinForm").submit();return;
+        {% endif %}
+        currentMatchIndex=index;document.getElementById("joinForm").action="/join/"+index;document.getElementById("join_teammate_email").value="";document.getElementById("join_teammate_name").value="";document.getElementById("join_no_account").checked=false;document.getElementById("join_teammate_name").classList.add("hidden");document.getElementById("join_email_status").textContent="";
+        var card=document.querySelectorAll('.card')[index];if(card){var typeEl=card.querySelector('h3');if(typeEl&&typeEl.textContent.trim()==='LD'){document.getElementById('join_teammate_email').style.display='none';document.getElementById('join_email_status').style.display='none';document.getElementById('join_no_account').parentElement.style.display='none';document.getElementById('join_teammate_name').style.display='none';}}
         openModal("joinModal");
     }
 
-    function toggleTeammateName(prefix) {
-        const noAccount = document.getElementById(prefix + "_no_account").checked;
-        const teammateEmail = document.getElementById(prefix + "_teammate_email");
-        const teammateName = document.getElementById(prefix + "_teammate_name");
-        const emailStatus = document.getElementById(prefix + "_email_status");
-        if (noAccount) {
-            teammateEmail.disabled = true;
-            teammateEmail.value = "";
-            teammateName.classList.remove("hidden");
-            if (emailStatus) emailStatus.textContent = "";
-        } else {
-            teammateEmail.disabled = false;
-            teammateName.classList.add("hidden");
-            teammateName.value = "";
-        }
+    function openReportModal(rid){document.getElementById("reportForm").action="/report/"+rid;document.getElementById("reportReason").value="";document.getElementById("reportDetails").value="";document.getElementById("reportDetails").classList.add("hidden");openModal("reportModal");}
+    function toggleReportDetails(){const reason=document.getElementById("reportReason").value;const details=document.getElementById("reportDetails");if(reason==="Other"){details.classList.remove("hidden");}else{details.classList.add("hidden");details.value="";}}
+    function toggleTeammateName(prefix){const noAccount=document.getElementById(prefix+"_no_account").checked;const teammateEmail=document.getElementById(prefix+"_teammate_email");const teammateName=document.getElementById(prefix+"_teammate_name");const emailStatus=document.getElementById(prefix+"_email_status");if(noAccount){teammateEmail.disabled=true;teammateEmail.value="";teammateName.classList.remove("hidden");if(emailStatus)emailStatus.textContent="";}else{teammateEmail.disabled=false;teammateName.classList.add("hidden");teammateName.value="";}}
+    function toggleTeammateByType(){var type=document.querySelector('#postModal select[name="type"]').value;var teammateEmail=document.getElementById('post_teammate_email');if(!teammateEmail)return;if(type==='LD'){teammateEmail.style.display='none';document.getElementById('post_email_status').style.display='none';document.getElementById('post_no_account').parentElement.style.display='none';document.getElementById('post_teammate_name').style.display='none';}else{teammateEmail.style.display='block';document.getElementById('post_email_status').style.display='block';document.getElementById('post_no_account').parentElement.style.display='flex';}}
+    async function checkTeammateEmail(prefix){const email=document.getElementById(prefix+"_teammate_email").value;const statusDiv=document.getElementById(prefix+"_email_status");if(!email){statusDiv.textContent="";return;}try{const response=await fetch('/api/check-email?email='+encodeURIComponent(email));const data=await response.json();if(data.exists){statusDiv.textContent="User found: "+data.name;statusDiv.className="email-status valid";}else{statusDiv.textContent="Email not registered, will display as entered";statusDiv.className="email-status invalid";}}catch(error){statusDiv.textContent="";}}
+
+    function switchTimerFormat(el,format){currentFormat=format;document.querySelectorAll('.format-btn').forEach(btn=>{btn.classList.remove('active','custom-active');});if(format==='custom'){el.classList.add('custom-active');document.getElementById('timerContainer').innerHTML='';document.getElementById('customTimerSection').style.display='block';renderAllCustomTimers();}else{el.classList.add('active');document.getElementById('customTimerSection').style.display='none';initTimer();}}
+    function initTimer(){const container=document.getElementById('timerContainer');if(!container)return;const config=timerConfigs[currentFormat];if(!config||config.length===0)return;timers={};container.innerHTML='';config.forEach((item,index)=>{const timerId='timer_'+currentFormat+'_'+index;timers[timerId]={id:timerId,name:item.name,sec:item.time,remain:item.time,interval:null,running:false};const card=document.createElement('div');card.className='timer-card';card.innerHTML='<h4>'+item.name+'</h4><div class="timer-display" id="display_'+timerId+'">'+formatTime(item.time)+'</div><div class="timer-controls"><button class="btn-green" onclick="startTimer(\''+timerId+'\')">Start</button><button class="btn-orange" onclick="pauseTimer(\''+timerId+'\')">Pause</button><button onclick="resetTimer(\''+timerId+'\')" style="background:#718096;">Reset</button></div>';container.appendChild(card);});}
+    function formatTime(seconds){const h=String(Math.floor(seconds/3600)).padStart(2,'0');const m=String(Math.floor((seconds%3600)/60)).padStart(2,'0');const s=String(seconds%60).padStart(2,'0');if(h==='00')return m+':'+s;return h+':'+m+':'+s;}
+    function startTimer(timerId){const timer=timers[timerId]||customTimers[timerId];if(!timer||timer.running)return;timer.running=true;timer.interval=setInterval(()=>{if(timer.remain>0){timer.remain--;const display=document.getElementById('display_'+timerId);if(display)display.textContent=formatTime(timer.remain);if(timer.remain===0){pauseTimer(timerId);alert(timer.name+' - Time\'s Up!');}}},1000);}
+    function pauseTimer(timerId){const timer=timers[timerId]||customTimers[timerId];if(!timer)return;timer.running=false;if(timer.interval){clearInterval(timer.interval);timer.interval=null;}}
+    function resetTimer(timerId){const timer=timers[timerId]||customTimers[timerId];if(!timer)return;pauseTimer(timerId);timer.remain=timer.sec;const display=document.getElementById('display_'+timerId);if(display)display.textContent=formatTime(timer.remain);}
+    function addCustomTimerRow(){const container=document.getElementById('customTimerInputs');const rowId='custom_row_'+customTimerCounter;const row=document.createElement('div');row.id=rowId;row.className='custom-input-row';row.innerHTML='<input type="text" id="name_'+rowId+'" placeholder="Timer Name (optional)" style="margin-bottom:12px;"><div class="time-input-group"><input type="number" id="minutes_'+rowId+'" placeholder="Min" min="0" value="0" style="width:100px;"><span>:</span><input type="number" id="seconds_'+rowId+'" placeholder="Sec" min="0" max="59" value="0" style="width:100px;"><button class="btn-green" onclick="createCustomTimer(\''+rowId+'\')" style="width:auto; padding:12px 24px;">Create</button><button class="btn-red" onclick="document.getElementById(\''+rowId+'\').remove()" style="width:auto; padding:12px 24px;">Cancel</button></div><div class="hint-text" style="margin-top:10px;">Enter minutes and seconds (e.g., 1 min 30 sec)</div>';container.appendChild(row);customTimerCounter++;}
+    function createCustomTimer(rowId){const nameInput=document.getElementById('name_'+rowId);const minutesInput=document.getElementById('minutes_'+rowId);const secondsInput=document.getElementById('seconds_'+rowId);let minutes=parseInt(minutesInput.value)||0;let seconds=parseInt(secondsInput.value)||0;if(minutes===0&&seconds===0){alert('Please enter a time greater than 0');return;}const totalSeconds=(minutes*60)+seconds;const timerName=nameInput.value.trim()||'Custom Timer '+(Object.keys(customTimers).length+1);const timerId='custom_'+Date.now()+'_'+Math.random();customTimers[timerId]={id:timerId,name:timerName,sec:totalSeconds,remain:totalSeconds,interval:null,running:false};document.getElementById(rowId).remove();if(currentFormat==='custom'){renderCustomTimerCard(timerId);}}
+    function renderCustomTimerCard(timerId){const container=document.getElementById('customTimerContainer');const timer=customTimers[timerId];if(!timer)return;const card=document.createElement('div');card.id='card_'+timerId;card.className='timer-card';card.style.background='rgba(180,77,255,0.08)';card.style.borderColor='rgba(180,77,255,0.2)';card.innerHTML='<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><h4>'+timer.name+'</h4><button class="btn-red" onclick="deleteCustomTimer(\''+timerId+'\')" style="width:auto; padding:6px 18px;">Delete</button></div><div class="timer-display" id="display_'+timerId+'">'+formatTime(timer.remain)+'</div><div class="timer-controls"><button class="btn-green" onclick="startTimer(\''+timerId+'\')">Start</button><button class="btn-orange" onclick="pauseTimer(\''+timerId+'\')">Pause</button><button onclick="resetTimer(\''+timerId+'\')" style="background:#718096;">Reset</button></div>';container.appendChild(card);}
+    function renderAllCustomTimers(){const container=document.getElementById('customTimerContainer');if(!container)return;container.innerHTML='';Object.keys(customTimers).forEach(timerId=>{renderCustomTimerCard(timerId);});}
+    function deleteCustomTimer(timerId){const timer=customTimers[timerId];if(timer&&timer.interval){clearInterval(timer.interval);}delete customTimers[timerId];const card=document.getElementById('card_'+timerId);if(card)card.remove();}
+
+    function openDetailModal(rid){
+        {% for m in db.matches %}
+        if('{{ m.rid }}'===rid){document.getElementById('detailTitle').textContent='{{ m.type }} Match Detail';document.getElementById('detailBody').innerHTML='<p><strong>Posted by:</strong> {% if m.author == "ian@cactumatch.com" %}Platform{% else %}{{ m.author_name }}{% endif %}</p><p><strong>Time:</strong> {{ m.time }}</p><p><strong>Platform:</strong> {{ m.platform }}</p><p><strong>Meeting ID:</strong> {{ m.meeting_id }}</p><p><strong>Password:</strong> {{ m.meeting_pwd }}</p><p><strong>Judge:</strong> {{ m.judge }}</p><p><strong>Teams:</strong> {% for t in m.teams %}{{ t }}{% if not loop.last %}, {% endif %}{% endfor %}</p><div style="background:var(--bg-input); padding:14px; border-radius:var(--radius-sm); margin-top:14px;"><strong>Full Note:</strong><p style="margin-top:10px;">{{ m.note or "None" }}</p></div>';}
+        {% endfor %}
+        openModal('detailModal');
     }
 
-    async function checkTeammateEmail(prefix) {
-        const email = document.getElementById(prefix + "_teammate_email").value;
-        const statusDiv = document.getElementById(prefix + "_email_status");
-        if (!email) { statusDiv.textContent = ""; return; }
-        try {
-            const response = await fetch('/api/check-email?email=' + encodeURIComponent(email));
-            const data = await response.json();
-            if (data.exists) {
-                statusDiv.textContent = "✓ User found: " + data.name;
-                statusDiv.className = "email-status valid";
-            } else {
-                statusDiv.textContent = "⚠ Email not registered, will display as entered";
-                statusDiv.className = "email-status invalid";
-            }
-        } catch (error) { statusDiv.textContent = ""; }
-    }
+    // ========== User Info Popup ==========
+    function createUserInfoPopup(){if(userInfoPopup)return;userInfoPopup=document.createElement('div');userInfoPopup.id='userInfoPopup';userInfoPopup.style.cssText='position:fixed;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.7);z-index:100000;min-width:280px;max-width:360px;display:none;backdrop-filter:blur(20px);';document.body.appendChild(userInfoPopup);document.addEventListener('click',function(e){if(userInfoPopup&&userInfoPopup.style.display==='block'){if(!userInfoPopup.contains(e.target)&&!e.target.closest('.card-avatar')&&!e.target.closest('.avatar-row')){userInfoPopup.style.display='none';}}});}
+    async function showUserInfo(email,event){createUserInfoPopup();event.stopPropagation();const rect=event.target.getBoundingClientRect();userInfoPopup.style.top=(rect.bottom+10)+'px';userInfoPopup.style.left=Math.min(rect.left,window.innerWidth-380)+'px';userInfoPopup.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);">Loading...</div>';userInfoPopup.style.display='block';try{const response=await fetch('/api/user-info?email='+encodeURIComponent(email));const data=await response.json();if(data.error){userInfoPopup.innerHTML='<div style="text-align:center;padding:20px;color:var(--red);">User not found</div>';return;}const levelText=data.level?'LV'+data.level:'Unranked';userInfoPopup.innerHTML='<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;"><div style="width:50px;height:50px;border-radius:50%;background:'+data.color+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px;border:2px solid rgba(255,255,255,0.3);">'+(data.avatar?'<img src="/static/avatars/'+data.avatar+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">':data.name.split(' ').map(n=>n[0]).join(''))+'</div><div><div style="font-weight:700;font-size:16px;color:var(--text);">'+data.name+'</div><div style="font-size:12px;color:var(--text-muted);">'+(data.premium?'PREMIUM ':'')+(data.account_type!=='debater'?data.account_type.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase()):'')+'</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--text);">'+levelText+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Level</div></div><div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--text);">'+data.days_since_joined+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Days Joined</div></div><div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;grid-column:1/-1;"><div style="font-size:22px;font-weight:800;color:var(--text);">'+data.match_count+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Rounds Joined</div></div></div><div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:12px;">UID: '+data.uid+'</div>';}catch(error){userInfoPopup.innerHTML='<div style="text-align:center;padding:20px;color:var(--red);">Error loading info</div>';}}
 
-    function setFormat(format) {
-        currentFormat = format;
-        document.querySelectorAll('.format-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        initTimer();
-    }
+    // ========== Judge Pool ==========
+    function openJudgePool(){document.getElementById('avatarMenu').style.display='none';menuOpen=false;const existing=document.getElementById('judgePoolModal');if(existing)existing.remove();const modal=document.createElement('div');modal.className='modal';modal.style.display='flex';modal.style.zIndex='100001';modal.id='judgePoolModal';modal.innerHTML='<div class="modal-box" style="width:700px;max-width:95vw;max-height:85vh;"><div class="modal-header"><h3>Judge Pool</h3><span class="close" onclick="document.getElementById(\'judgePoolModal\').remove()">&times;</span></div><div class="modal-body" style="max-height:70vh;overflow-y:auto;"><div id="judgePoolContent" style="text-align:center;padding:40px;color:var(--text-muted);">Loading...</div></div></div>';document.body.appendChild(modal);{% if judge_pool %}renderJudgePool({{ judge_pool | tojson | safe }});{% else %}fetch('/api/judge-pool').then(r=>r.json()).then(renderJudgePool).catch(()=>document.getElementById('judgePoolContent').innerHTML='<div class="empty-state">Error loading judge pool</div>');{% endif %}}
+    function renderJudgePool(judges){const c=document.getElementById('judgePoolContent');if(!c)return;if(!judges||judges.length===0){c.innerHTML='<div class="empty-state">No judges in pool</div>';return;}let h='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;">';judges.forEach(j=>{h+='<div class="user-banner-card" style="cursor:default;"><div style="width:40px;height:40px;border-radius:50%;background:'+j.color+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;border:2px solid rgba(255,255,255,0.2);flex-shrink:0;">'+(j.avatar?'<img src="/static/avatars/'+j.avatar+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">':j.name.split(' ').map(n=>n[0]).join(''))+'</div><div style="min-width:0;flex:1;"><div style="font-weight:600;color:var(--text);font-size:13px;">'+j.name+'</div><div style="font-size:10px;color:var(--text-muted);">'+j.email+'</div><div style="display:flex;gap:4px;margin-top:4px;"><span class="'+(j.account_type==='student_judge'?'badge-student-judge':'badge-pro-judge')+'" style="font-size:9px;padding:2px 8px;">'+(j.account_type==='student_judge'?'Student Judge':'Pro Judge')+'</span><span style="background:var(--bg-input);color:var(--text-secondary);font-size:9px;padding:2px 8px;border-radius:10px;">'+j.judge_count+' rounds</span></div></div></div>';});h+='</div>';c.innerHTML=h;}
 
-    function initTimer() {
-        const container = document.getElementById('timerContainer');
-        if (!container) return;
-        const config = timerConfigs[currentFormat];
-        container.innerHTML = '';
-        config.forEach((item, index) => {
-            const timerId = `timer_${currentFormat}_${index}`;
-            timers[timerId] = { id: timerId, name: item.name, sec: item.time, remain: item.time, interval: null, running: false };
-            const card = document.createElement('div');
-            card.className = 'timer-card';
-            card.innerHTML = `
-                <h4>${item.name}</h4>
-                <div class="timer-display" id="display_${timerId}">${formatTime(item.time)}</div>
-                <div class="timer-controls">
-                    <button class="btn-green" onclick="startTimer('${timerId}')">Start</button>
-                    <button class="btn-orange" onclick="pauseTimer('${timerId}')">Pause</button>
-                    <button onclick="resetTimer('${timerId}')">Reset</button>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-    }
+    // ========== Match Journal ==========
+    function openMatchJournal(){document.getElementById('avatarMenu').style.display='none';menuOpen=false;const existing=document.getElementById('matchJournalModal');if(existing)existing.remove();const modal=document.createElement('div');modal.className='modal';modal.style.display='flex';modal.style.zIndex='100001';modal.id='matchJournalModal';modal.innerHTML='<div class="modal-box" style="width:90vw;max-width:1000px;max-height:85vh;"><div class="modal-header"><h3>Match Journal</h3><span class="close" onclick="document.getElementById(\'matchJournalModal\').remove()">&times;</span></div><div class="modal-body" style="max-height:70vh;overflow-y:auto;padding:20px;"><div id="matchJournalContent" style="text-align:center;padding:40px;color:var(--text-muted);">Loading...</div></div></div>';document.body.appendChild(modal);{% if journal %}const journalData={{ journal | tojson | safe }};{% else %}const journalData=[];{% endif %}renderMatchJournal(journalData);}
+    function renderMatchJournal(journal){const content=document.getElementById('matchJournalContent');if(!content)return;if(!journal||journal.length===0){content.innerHTML='<div class="empty-state">No match records yet</div>';return;}journal.sort((a,b)=>{try{return new Date(b.time)-new Date(a.time);}catch{return 0;}});let html='';journal.forEach(j=>{const isCompleted=j.completed;const borderColor=isCompleted?'var(--border)':'var(--primary)';const statusBadge=isCompleted?'<span style="background:rgba(46,213,115,0.2);color:var(--green);padding:3px 10px;border-radius:10px;font-size:11px;">Completed</span>':'<span style="background:rgba(0,255,163,0.2);color:var(--primary);padding:3px 10px;border-radius:10px;font-size:11px;">Active</span>';html+='<div class="journal-entry" style="border-color:'+borderColor+';"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div><span style="font-weight:700;color:var(--text);">RID: '+j.rid+'</span><span style="margin-left:10px;font-size:13px;color:var(--text-secondary);">'+j.type+'</span>'+statusBadge+'</div><span style="font-size:12px;color:var(--text-muted);">'+j.time+'</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:var(--text-secondary);"><div><strong>Platform:</strong> '+j.platform+'</div><div><strong>Judge:</strong> '+j.judge+'</div><div><strong>Meeting ID:</strong> '+j.meeting_id+'</div><div><strong>Password:</strong> '+j.meeting_pwd+'</div></div><div style="margin-top:10px;font-size:13px;color:var(--text-secondary);"><strong>Participants:</strong><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">'+(j.participants||[]).map(p=>'<span style="background:var(--bg-input);padding:4px 10px;border-radius:12px;font-size:12px;">'+p.name+(p.email?' ('+p.email+')':'')+'</span>').join('')+'</div></div>'+(j.teams_data&&j.teams_data.length>0?'<div style="margin-top:10px;font-size:13px;color:var(--text-secondary);"><strong>Teams:</strong>'+j.teams_data.map((t,i)=>'<div style="margin-top:4px;padding:4px 0;">Team '+(i+1)+': '+(t.members||[]).map(m=>m.name).join(', ')+'</div>').join('')+'</div>':'')+(j.completed_time?'<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">Completed: '+j.completed_time+'</div>':'')+'</div>';});content.innerHTML=html;}
 
-    function formatTime(seconds) {
-        const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-        const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-        const s = String(seconds % 60).padStart(2, '0');
-        if (h === '00') return `${m}:${s}`;
-        return `${h}:${m}:${s}`;
-    }
+    // ========== User Journal ==========
+    function openUserJournal(){document.getElementById('avatarMenu').style.display='none';menuOpen=false;const existing=document.getElementById('userJournalModal');if(existing)existing.remove();const modal=document.createElement('div');modal.className='modal';modal.style.display='flex';modal.style.zIndex='100001';modal.id='userJournalModal';modal.innerHTML='<div class="modal-box" style="width:95vw;max-width:1200px;max-height:90vh;"><div class="modal-header"><h3>User Journal</h3><span class="close" onclick="document.getElementById(\'userJournalModal\').remove()">&times;</span></div><div class="modal-body" style="max-height:75vh;overflow-y:auto;padding:20px;"><div id="userJournalContent" style="text-align:center;padding:40px;color:var(--text-muted);">Loading...</div></div></div>';document.body.appendChild(modal);loadUserJournal();}
+    function loadUserJournal(){const content=document.getElementById('userJournalContent');if(!content)return;{% if db and db.users %}const allUsers={{ db.users | tojson | safe }};{% else %}const allUsers=[];{% endif %}if(!allUsers||allUsers.length===0){content.innerHTML='<div class="empty-state">No users found</div>';return;}let h='<div style="display:flex;gap:6px;margin-bottom:20px;background:var(--bg-secondary);padding:4px;border-radius:var(--radius);border:1px solid var(--border);">';h+='<div class="uj-tab active" onclick="filterUserJournal(\'all\')" style="flex:1;padding:10px;text-align:center;cursor:pointer;border-radius:var(--radius-sm);font-weight:600;font-size:12px;color:#000;background:var(--primary);">All</div>';h+='<div class="uj-tab" onclick="filterUserJournal(\'debater\')" style="flex:1;padding:10px;text-align:center;cursor:pointer;border-radius:var(--radius-sm);font-weight:600;font-size:12px;color:var(--text-muted);">Debaters</div>';h+='<div class="uj-tab" onclick="filterUserJournal(\'student_judge\')" style="flex:1;padding:10px;text-align:center;cursor:pointer;border-radius:var(--radius-sm);font-weight:600;font-size:12px;color:var(--text-muted);">Student Judges</div>';h+='<div class="uj-tab" onclick="filterUserJournal(\'professional_judge\')" style="flex:1;padding:10px;text-align:center;cursor:pointer;border-radius:var(--radius-sm);font-weight:600;font-size:12px;color:var(--text-muted);">Pro Judges</div>';h+='</div><div id="ujGrid"></div><div id="userHistoryDetail" style="margin-top:20px;"></div>';content.innerHTML=h;window._ujUsers=allUsers;filterUserJournal('all');}
+    function filterUserJournal(type){document.querySelectorAll('.uj-tab').forEach((t,i)=>{const types=['all','debater','student_judge','professional_judge'];t.style.background=types[i]===type?'var(--primary)':'transparent';t.style.color=types[i]===type?'#000':'var(--text-muted)';});const users=type==='all'?window._ujUsers:window._ujUsers.filter(u=>u.account_type===type);const grid=document.getElementById('ujGrid');if(!grid)return;let h='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">';users.forEach(u=>{const initials=(u.first_name[0]+u.last_name[0]).toUpperCase();const lvText=u.level?'LV'+u.level:'-';const lvClass=u.level?'lv'+u.level:'lv1';let typeBadge='';if(u.account_type==='student_judge')typeBadge='<span class="badge-student-judge" style="font-size:9px;padding:2px 8px;">Student Judge</span>';else if(u.account_type==='professional_judge')typeBadge='<span class="badge-pro-judge" style="font-size:9px;padding:2px 8px;">Pro Judge</span>';h+='<div class="user-banner-card" onclick="showUserHistory(\''+u.uid+'\')"><div style="width:44px;height:44px;border-radius:50%;background:'+u.color+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;border:2px solid rgba(255,255,255,0.2);flex-shrink:0;">'+(u.avatar?'<img src="/static/avatars/'+u.avatar+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">':initials)+'</div><div style="min-width:0;flex:1;"><div style="font-weight:600;color:var(--text);font-size:13px;">'+u.first_name+' '+u.last_name+'</div><div style="font-size:10px;color:var(--text-muted);">'+u.email+'</div><div style="display:flex;gap:4px;margin-top:4px;"><span class="lv-badge '+lvClass+'" style="font-size:9px;padding:2px 8px;">'+lvText+'</span>'+(u.premium?'<span class="premium-name-badge" style="font-size:9px;padding:2px 8px;">PREMIUM</span>':'')+typeBadge+'</div></div></div>';});h+='</div>';grid.innerHTML=h;document.getElementById('userHistoryDetail').innerHTML='';}
+    async function showUserHistory(uid){const detailDiv=document.getElementById('userHistoryDetail');if(!detailDiv)return;detailDiv.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);">Loading...</div>';try{const r=await fetch('/api/user/'+uid+'/history');const d=await r.json();if(d.error){detailDiv.innerHTML='<div style="color:var(--red);">'+d.error+'</div>';return;}const u=d.user;let h='<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;"><div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;"><div style="width:48px;height:48px;border-radius:50%;background:'+u.color+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;border:2px solid rgba(255,255,255,0.3);">'+(u.avatar?'<img src="/static/avatars/'+u.avatar+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">':u.name.split(' ').map(n=>n[0]).join(''))+'</div><div><div style="font-weight:700;font-size:18px;color:var(--text);">'+u.name+'</div><div style="font-size:12px;color:var(--text-muted);">'+u.email+' | UID: '+u.uid+' | '+(u.level?'LV'+u.level:'Unranked')+' | '+u.account_type.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())+'</div></div></div>';if(d.match_history&&d.match_history.length>0){h+='<h4 style="color:var(--text);margin-bottom:12px;">Match History ('+d.match_count+' rounds)</h4>';d.match_history.forEach(j=>{h+='<div style="background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:var(--text);">RID: '+j.rid+'</span><span style="font-size:12px;color:var(--text-muted);">'+j.type+' | '+j.time+'</span></div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">'+j.platform+' | Judge: '+j.judge+'</div></div>';});}if(d.judge_history&&d.judge_history.length>0){h+='<h4 style="color:var(--text);margin:16px 0 12px;">Judging History ('+d.judge_count+' rounds)</h4>';d.judge_history.forEach(j=>{h+='<div style="background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:var(--text);">RID: '+j.rid+'</span><span style="font-size:12px;color:var(--text-muted);">'+j.type+' | '+j.time+'</span></div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">'+j.platform+' | Teams: '+(j.teams||[]).join(', ')+'</div></div>';});}if((!d.match_history||d.match_history.length===0)&&(!d.judge_history||d.judge_history.length===0)){h+='<div style="color:var(--text-muted);text-align:center;padding:20px;">No history yet</div>';}h+='</div>';detailDiv.innerHTML=h;detailDiv.scrollIntoView({behavior:'smooth'});}catch(e){detailDiv.innerHTML='<div style="color:var(--red);">Error</div>';}}
 
-    function startTimer(timerId) {
-        const timer = timers[timerId] || customTimers[timerId];
-        if (!timer || timer.running) return;
-        timer.running = true;
-        timer.interval = setInterval(() => {
-            if (timer.remain > 0) {
-                timer.remain--;
-                document.getElementById(`display_${timerId}`).textContent = formatTime(timer.remain);
-                if (timer.remain === 0) { pauseTimer(timerId); alert(`${timer.name} - Time's Up!`); }
-            }
-        }, 1000);
-    }
-
-    function pauseTimer(timerId) {
-        const timer = timers[timerId] || customTimers[timerId];
-        if (!timer) return;
-        timer.running = false;
-        if (timer.interval) { clearInterval(timer.interval); timer.interval = null; }
-    }
-
-    function resetTimer(timerId) {
-        const timer = timers[timerId] || customTimers[timerId];
-        if (!timer) return;
-        pauseTimer(timerId);
-        timer.remain = timer.sec;
-        document.getElementById(`display_${timerId}`).textContent = formatTime(timer.remain);
-    }
-
-    function addCustomTimerRow() {
-        const container = document.getElementById('customTimerInputs');
-        const rowId = `custom_row_${customTimerCounter}`;
-        const row = document.createElement('div');
-        row.id = rowId;
-        row.style.cssText = 'background:#fff; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #e0e0e0;';
-        row.innerHTML = `
-            <input type="text" id="name_${rowId}" placeholder="Timer Name (optional)" style="margin-bottom:10px;">
-            <div class="time-input-group">
-                <input type="number" id="minutes_${rowId}" placeholder="Min" min="0" value="0" style="width:100px;">
-                <span>:</span>
-                <input type="number" id="seconds_${rowId}" placeholder="Sec" min="0" max="59" value="0" style="width:100px;">
-                <button class="btn-green" onclick="createCustomTimer('${rowId}')" style="width:auto; padding:10px 20px;">Create</button>
-                <button class="btn-red" onclick="document.getElementById('${rowId}').remove()" style="width:auto; padding:10px 20px;">Cancel</button>
-            </div>
-            <div class="hint-text" style="margin-top:8px;">Enter minutes and seconds (e.g., 1 min 30 sec)</div>
-        `;
-        container.appendChild(row);
-        customTimerCounter++;
-    }
-
-    function createCustomTimer(rowId) {
-        const nameInput = document.getElementById(`name_${rowId}`);
-        const minutesInput = document.getElementById(`minutes_${rowId}`);
-        const secondsInput = document.getElementById(`seconds_${rowId}`);
-        let minutes = parseInt(minutesInput.value) || 0;
-        let seconds = parseInt(secondsInput.value) || 0;
-        if (minutes === 0 && seconds === 0) { alert('Please enter a time greater than 0'); return; }
-        const totalSeconds = (minutes * 60) + seconds;
-        const timerName = nameInput.value.trim() || `Custom Timer ${Object.keys(customTimers).length + 1}`;
-        const timerId = `custom_${Date.now()}_${Math.random()}`;
-        customTimers[timerId] = { id: timerId, name: timerName, sec: totalSeconds, remain: totalSeconds, interval: null, running: false };
-        document.getElementById(rowId).remove();
-        renderCustomTimer(timerId);
-    }
-
-    function renderCustomTimer(timerId) {
-        const container = document.getElementById('customTimerContainer');
-        const timer = customTimers[timerId];
-        const card = document.createElement('div');
-        card.id = `card_${timerId}`;
-        card.className = 'timer-card';
-        card.style.background = '#fff3e0';
-        card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h4>${timer.name}</h4>
-                <button class="btn-red" onclick="deleteCustomTimer('${timerId}')" style="width:auto; padding:5px 15px;">Delete</button>
-            </div>
-            <div class="timer-display" id="display_${timerId}">${formatTime(timer.remain)}</div>
-            <div class="timer-controls">
-                <button class="btn-green" onclick="startTimer('${timerId}')">Start</button>
-                <button class="btn-orange" onclick="pauseTimer('${timerId}')">Pause</button>
-                <button onclick="resetTimer('${timerId}')">Reset</button>
-            </div>
-        `;
-        container.appendChild(card);
-    }
-
-    function deleteCustomTimer(timerId) {
-        const timer = customTimers[timerId];
-        if (timer && timer.interval) { clearInterval(timer.interval); }
-        delete customTimers[timerId];
-        document.getElementById(`card_${timerId}`).remove();
-    }
-
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById("avatarMenu");
-        const avatarRow = document.querySelector(".avatar-row");
-        if (menu && avatarRow && !avatarRow.contains(event.target) && !menu.contains(event.target)) {
-            menu.style.display = "none";
-            menuOpen = false;
-        }
-    });
-
-    window.addEventListener('load', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('registered') === 'success') {
-            openModal('authModal');
-            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-            document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
-            document.querySelector(".tab:first-child").classList.add("active");
-            document.getElementById("login-form").classList.add("active");
-        }
-    });
+    document.addEventListener('click',function(event){const menu=document.getElementById("avatarMenu");const avatarRow=document.querySelector(".avatar-row");if(menu&&avatarRow&&!avatarRow.contains(event.target)&&!menu.contains(event.target)){menu.style.display="none";menuOpen=false;}});
+    window.addEventListener('load',function(){var urlParams=new URLSearchParams(window.location.search);if(urlParams.get('registered')==='success'){openModal('authModal');document.querySelectorAll("#authModal .tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll("#authModal .form").forEach(f=>f.classList.remove("active"));document.querySelector("#authModal .tab:first-child").classList.add("active");document.getElementById("login-form").classList.add("active");}if(window.location.pathname==='/timer'){setTimeout(function(){initTimer();},100);}});
 </script>
 </body>
 </html>
