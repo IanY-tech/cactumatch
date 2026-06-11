@@ -6,9 +6,9 @@ import string
 from datetime import datetime, timedelta
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='Templates', static_folder='Static')
 app.secret_key = "cactumatch_secure_key_2026"
-app.config['UPLOAD_FOLDER'] = 'static/avatars'
+app.config['UPLOAD_FOLDER'] = 'Static/avatars'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 DB_FILE = "db.json"
